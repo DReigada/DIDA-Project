@@ -40,14 +40,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Client\Board.cs" />
+    <Compile Include="PacMan\Client\Board.cs" />
     <Compile Include="Client\ConnectedClient.cs" />
-    <Compile Include="Client\IPacManClient.cs" />
-    <Compile Include="IServer.cs" />
+    <Compile Include="Client\IClient.cs" />
+    <Compile Include="PacMan\Server\GameProps.cs" />
+    <Compile Include="PacMan\Client\IPacManClient.cs" />
+    <Compile Include="PacMan\Server\IPacManServer.cs" />
+    <Compile Include="PacMan\Server\Movement.cs" />
+    <Compile Include="Server\ClientInfo.cs" />
+    <Compile Include="Server\IServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Server\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
