@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ClientServerInterface.PacMan.Client.Game {
+    [Serializable]
     public class Board {
         public Board(List<Ghost> ghosts, List<PacManPlayer> players, List<Coin> coins) {
             Ghosts = ghosts;
