@@ -9,6 +9,6 @@ namespace ClientServerInterface.PacMan.Client.Game {
 
         public List<Ghost> Ghosts { get; }
         public List<PacManPlayer> Players { get; }
-
+        public List<Coin> Coins { get; }
     }
 }

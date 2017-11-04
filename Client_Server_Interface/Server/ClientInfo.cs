@@ -1,5 +1,14 @@
 ﻿namespace ClientServerInterface.Server {
     public class ClientInfo {
-        // TODO: add necessary fields here
+        public ClientInfo(string port, string name)
+        {
+            Port = port;
+            Name = name;
+        }
+
+        public string Port { get; }
+
+        public string Name { get; }
+
     }
 }
