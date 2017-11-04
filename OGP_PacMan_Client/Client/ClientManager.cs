@@ -1,9 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
+using System.Threading;
 using System.Windows.Forms;
 using ClientServerInterface.PacMan.Client.Game;
+using ClientServerInterface.PacMan.Server;
+using ClientServerInterface.Server;
 using OGPPacManClient.Interface;
 using Timer = System.Threading.Timer;
 
@@ -12,22 +16,43 @@ namespace OGPPacManClient.Client {
         private readonly ClientImpl client;
         public readonly BoardController controller;
         private readonly Form1 form;
+        private readonly int port;
+        private readonly int serverPort;
+        private IPacmanServer server;
 
-        public ClientManager() {
+        public ClientManager(int port, int serverPort) {
+            this.port = port;
+            this.serverPort = serverPort;
+
             form = new Form1();
             controller = new BoardController(form);
             client = new ClientImpl(controller);
         }
 
         public void Start() {
+            new Thread(() => Application.Run(form)).Start();
+            RegisterTCPChannel();
             RegisterClientChannel();
-            Application.Run(form);
+            server = GetServerConnection();
+            var gameProps =
+                server.RegisterClient(new ClientInfo($"tcp://localhost:{port}/PacManClient", "")); //TODO what is name?
         }
 
-        private void RegisterClientChannel() {
-            var channel = new TcpChannel(8086);
+        private void RegisterTCPChannel() {
+            var channel = new TcpChannel(port);
             ChannelServices.RegisterChannel(channel, false);
+        }
+
+
+        private void RegisterClientChannel() {
             RemotingServices.Marshal(client, "PacManClient");
+        }
+
+        private IPacmanServer GetServerConnection() {
+            return (IPacmanServer)
+                Activator.GetObject(
+                    typeof(IPacmanServer),
+                    $"tcp://localhost:{serverPort}/PacManServer");
         }
 
         // TODO: remove this, this is just for testing

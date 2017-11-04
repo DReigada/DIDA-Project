@@ -1,10 +1,5 @@
-﻿using System.Linq;
-using System.Threading;
-using System.Windows.Forms;
-using ClientServerInterface.PacMan.Client.Game;
+﻿using System.Windows.Forms;
 using OGPPacManClient.Client;
-using OGPPacManClient.Interface;
-using Timer = System.Threading.Timer;
 
 namespace pacman {
     internal static class Program {
@@ -16,7 +11,7 @@ namespace pacman {
             Application.SetCompatibleTextRenderingDefault(false);
 
 
-            var clientManager = new ClientManager();
+            var clientManager = new ClientManager(16004, 8086);
             clientManager.Start();
         }
     }
