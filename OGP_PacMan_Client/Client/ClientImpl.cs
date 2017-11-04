@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ClientServerInterface.Client;
 using ClientServerInterface.PacMan.Client;
 using ClientServerInterface.PacMan.Client.Game;
 using OGPPacManClient.Interface;
 
 namespace OGPPacManClient.Client {
-    internal class ClientImpl : IPacManClient {
+    internal class ClientImpl : MarshalByRefObject, IPacManClient {
         private readonly BoardController controller;
         private List<ConnectedClient> connectedClients;
 
