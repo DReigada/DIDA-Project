@@ -1,4 +1,7 @@
-﻿namespace ClientServerInterface.PacMan.Server {
+﻿using System;
+
+namespace ClientServerInterface.PacMan.Server {
+    [Serializable]
     public class GameProps {
         public GameProps(int gameSpeed, int numberPlayers)
         {

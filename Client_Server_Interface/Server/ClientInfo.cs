@@ -1,14 +1,15 @@
-﻿namespace ClientServerInterface.Server {
+﻿using System;
+
+namespace ClientServerInterface.Server {
+    [Serializable]
     public class ClientInfo {
-        public ClientInfo(string port, string name)
-        {
-            Port = port;
+        public ClientInfo(string url, string name) {
+            Url = url;
             Name = name;
         }
 
-        public string Port { get; }
+        public string Url { get; }
 
         public string Name { get; }
-
     }
 }
