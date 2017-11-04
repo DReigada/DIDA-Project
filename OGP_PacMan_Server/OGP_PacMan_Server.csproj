@@ -43,8 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="PacManServer.cs" />
+    <Compile Include="Game\ServerPacManPlayer.cs" />
+    <Compile Include="Game\ServerGhost.cs" />
+    <Compile Include="Game\IGame.cs" />
+    <Compile Include="Game\PacManGame.cs" />
+    <Compile Include="Server\PacManServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -57,5 +60,6 @@
       <Name>ClientServerInterface</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
