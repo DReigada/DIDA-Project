@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using ClientServerInterface.PacMan.Client.Game;
@@ -6,45 +7,44 @@ using OGPPacManClient.Properties;
 
 namespace OGPPacManClient.Interface {
     internal class BoardController {
+        private readonly Dictionary<int, PictureBox> coins;
         private readonly Form1 form;
 
         private readonly Dictionary<int, PictureBox> ghosts;
         private readonly Dictionary<int, PictureBox> players;
 
+
         public BoardController(Form1 form) {
             ghosts = new Dictionary<int, PictureBox>();
             players = new Dictionary<int, PictureBox>();
+            coins = new Dictionary<int, PictureBox>();
+
             this.form = form;
         }
 
-        public void Update(Board b) {
-            form.Invoke((MethodInvoker) (() => UpdatePositions(b.Ghosts, b.Players)));
+        public void Update(Board board) {
+            form.Invoke((MethodInvoker) (() => UpdatePositions(board)));
         }
 
 
-        private void UpdatePositions(List<Ghost> updatedGhosts, List<PacManPlayer> updatedPlayers) {
-            updatedGhosts.ForEach(ghost => {
-                    if (ghosts.TryGetValue(ghost.Id, out var maybeGhost)){
-                        maybeGhost.Left = ghost.Position.X;
-                        maybeGhost.Top = ghost.Position.Y;
-                    }
-                    else{
-                        var pic = initGhost(ghost);
-                        form.Controls.Add(pic);
-                        ghosts.Add(ghost.Id, pic);
-                    }
-                }
-            );
+        private void UpdatePositions(Board updatedBoard) {
+            updateProps(updatedBoard.Ghosts, ghosts, initGhost);
+            updateProps(updatedBoard.Players, players, initPlayer);
+            updateProps(updatedBoard.Coins, coins, initCoin);
+        }
 
-            updatedPlayers.ForEach(player => {
-                    if (players.TryGetValue(player.Id, out var maybePlayer)){
-                        maybePlayer.Left = player.Position.X;
-                        maybePlayer.Top = player.Position.Y;
+
+        private void updateProps<A>(List<A> props, Dictionary<int, PictureBox> dict, Func<A, PictureBox> initProp)
+            where A : AbstractProp {
+            props.ForEach(prop => {
+                    if (dict.TryGetValue(prop.Id, out var maybeProp)){
+                        maybeProp.Left = prop.Position.X;
+                        maybeProp.Top = prop.Position.Y;
                     }
                     else{
-                        var pic = initPlayer(player);
+                        var pic = initProp(prop);
                         form.Controls.Add(pic);
-                        players.Add(player.Id, pic);
+                        dict.Add(prop.Id, pic);
                     }
                 }
             );
@@ -85,13 +85,29 @@ namespace OGPPacManClient.Interface {
                 BackColor = Color.Transparent,
                 Image = Resources.Left,
                 Margin = new Padding(0),
-                Name = "pacman",
+                Name = $"pacman{player.Id}",
                 Size = new Size(25, 25),
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 TabIndex = 4,
                 TabStop = false,
                 Left = player.Position.X,
                 Top = player.Position.Y
+            };
+        }
+
+
+        private PictureBox initCoin(Coin coin) {
+            return new PictureBox {
+                BackColor = Color.Transparent,
+                Image = Resources.cccc,
+                Margin = new Padding(0),
+                Name = $"coin{coin.Id}",
+                Size = new Size(22, 22),
+                SizeMode = PictureBoxSizeMode.StretchImage,
+                TabIndex = 4,
+                TabStop = false,
+                Left = coin.Position.X,
+                Top = coin.Position.Y
             };
         }
     }

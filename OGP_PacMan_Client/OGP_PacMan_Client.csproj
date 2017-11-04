@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\ClientImpl.cs" />
     <Compile Include="Interface\BoardController.cs" />
     <Compile Include="Interface\Form1.cs">
       <SubType>Form</SubType>
@@ -57,9 +58,6 @@
     <Compile Include="Interface\Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Game\Ghost.cs" />
-    <Compile Include="Game\PacManPlayer.cs" />
-    <Compile Include="Game\Prop.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Interface\Form1.resx">
