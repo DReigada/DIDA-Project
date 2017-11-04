@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
-using pacman.Properties;
+using OGPPacManClient.Properties;
 
-namespace pacman {
+namespace OGPPacManClient.Interface {
     public partial class Form1 : Form {
         private bool godown;
         private bool goleft;
@@ -17,19 +17,15 @@ namespace pacman {
             switch (e.KeyCode){
                 case Keys.Left:
                     goleft = true;
-                    pacman.Image = Resources.Left;
                     break;
                 case Keys.Right:
                     goright = true;
-                    pacman.Image = Resources.Right;
                     break;
                 case Keys.Up:
                     goup = true;
-                    pacman.Image = Resources.Up;
                     break;
                 case Keys.Down:
                     godown = true;
-                    pacman.Image = Resources.Down;
                     break;
                 case Keys.Enter:
                     tbMsg.Enabled = true;

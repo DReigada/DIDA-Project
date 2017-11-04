@@ -8,7 +8,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace pacman.Properties {
+using System.Drawing;
+
+namespace OGPPacManClient.Properties {
     using System;
     
     
@@ -39,7 +41,7 @@ namespace pacman.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("pacman.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OGPPacManClient.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -123,7 +125,7 @@ namespace pacman.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap red_guy {
+        internal static Bitmap red_guy {
             get {
                 object obj = ResourceManager.GetObject("red_guy", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
