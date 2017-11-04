@@ -1,52 +1,46 @@
 ﻿using System.Windows.Forms;
-using OGPPacManClient.Properties;
+using ClientServerInterface.PacMan.Server;
 
 namespace OGPPacManClient.Interface {
     public partial class Form1 : Form {
-        private bool godown;
-        private bool goleft;
-        private bool goright;
-        private bool goup;
-
         public Form1() {
+            Direction = Movement.Direction.Stopped;
             InitializeComponent();
             label2.Visible = false;
         }
 
-        private void keyisdown(object sender, KeyEventArgs e) {
+        public Movement.Direction Direction { get; private set; }
+
+
+        private void KeyIsDown(object sender, KeyEventArgs e) {
             switch (e.KeyCode){
                 case Keys.Left:
-                    goleft = true;
+                    Direction = Movement.Direction.Left;
                     break;
                 case Keys.Right:
-                    goright = true;
+                    Direction = Movement.Direction.Right;
                     break;
                 case Keys.Up:
-                    goup = true;
+                    Direction = Movement.Direction.Up;
                     break;
                 case Keys.Down:
-                    godown = true;
+                    Direction = Movement.Direction.Down;
                     break;
                 case Keys.Enter:
                     tbMsg.Enabled = true;
+                    Direction = Movement.Direction.Stopped;
                     tbMsg.Focus();
                     break;
             }
         }
 
-        private void keyisup(object sender, KeyEventArgs e) {
+        private void KeyIsUp(object sender, KeyEventArgs e) {
             switch (e.KeyCode){
                 case Keys.Left:
-                    goleft = false;
-                    break;
                 case Keys.Right:
-                    goright = false;
-                    break;
                 case Keys.Up:
-                    goup = false;
-                    break;
                 case Keys.Down:
-                    godown = false;
+                    Direction = Movement.Direction.Stopped;
                     break;
             }
         }

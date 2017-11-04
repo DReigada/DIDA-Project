@@ -27,7 +27,7 @@ namespace OGP_PacMan_Server {
 
         public GameProps RegisterClient(ClientInfo client) {
             clients.Add(client);
-            GameProps props = new GameProps(gameSpeed, numberPlayers);
+            GameProps props = new GameProps(gameSpeed, numberPlayers, clients.Count);
             if (clients.Count == numberPlayers){
                 game.Start(clients);
             }

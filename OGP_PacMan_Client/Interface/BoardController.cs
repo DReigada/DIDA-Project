@@ -7,11 +7,11 @@ using OGPPacManClient.Properties;
 
 namespace OGPPacManClient.Interface {
     internal class BoardController {
-        private readonly Dictionary<int, PictureBox> coins;
         private readonly Form1 form;
 
         private readonly Dictionary<int, PictureBox> ghosts;
         private readonly Dictionary<int, PictureBox> players;
+        private readonly Dictionary<int, PictureBox> coins;
 
 
         public BoardController(Form1 form) {
@@ -28,13 +28,13 @@ namespace OGPPacManClient.Interface {
 
 
         private void UpdatePositions(Board updatedBoard) {
-            updateProps(updatedBoard.Ghosts, ghosts, initGhost);
-            updateProps(updatedBoard.Players, players, initPlayer);
-            updateProps(updatedBoard.Coins, coins, initCoin);
+            UpdateProps(updatedBoard.Ghosts, ghosts, initGhost);
+            UpdateProps(updatedBoard.Players, players, initPlayer);
+            UpdateProps(updatedBoard.Coins, coins, initCoin);
         }
 
 
-        private void updateProps<A>(List<A> props, Dictionary<int, PictureBox> dict, Func<A, PictureBox> initProp)
+        private void UpdateProps<A>(List<A> props, Dictionary<int, PictureBox> dict, Func<A, PictureBox> initProp)
             where A : AbstractProp {
             props.ForEach(prop => {
                     if (dict.TryGetValue(prop.Id, out var maybeProp)){

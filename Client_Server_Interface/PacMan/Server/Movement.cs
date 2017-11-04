@@ -7,7 +7,8 @@ namespace ClientServerInterface.PacMan.Server {
             Up,
             Down,
             Left,
-            Right
+            Right,
+            Stopped
         }
 
         public Movement(int id, Direction direction) {

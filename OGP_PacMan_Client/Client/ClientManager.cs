@@ -18,6 +18,7 @@ namespace OGPPacManClient.Client {
         private readonly Form1 form;
         private readonly int port;
         private readonly int serverPort;
+        private MovementController moveController;
         private IPacmanServer server;
 
         public ClientManager(int port, int serverPort) {
@@ -36,6 +37,8 @@ namespace OGPPacManClient.Client {
             server = GetServerConnection();
             var gameProps =
                 server.RegisterClient(new ClientInfo($"tcp://localhost:{port}/PacManClient", "")); //TODO what is name?
+            moveController = new MovementController(form, server, gameProps.GameSpeed, gameProps.UserId);
+            moveController.Start();
         }
 
         private void RegisterTCPChannel() {

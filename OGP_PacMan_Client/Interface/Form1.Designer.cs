@@ -146,8 +146,8 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Form1";
             this.Text = "DADman";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.keyisdown);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.keyisup);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeyIsDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.KeyIsUp);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
