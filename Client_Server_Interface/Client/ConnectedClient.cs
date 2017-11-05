@@ -3,6 +3,12 @@
 namespace ClientServerInterface.Client {
     [Serializable]
     public class ConnectedClient {
-        // TODO: add necessary fields here
+        public ConnectedClient(int id, string url) {
+            Id = id;
+            Url = url;
+        }
+
+        public int Id { get; }
+        public string Url { get; }
     }
 }

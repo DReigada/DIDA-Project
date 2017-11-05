@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using ClientServerInterface.PacMan.Client.Game;
 using ClientServerInterface.PacMan.Server;
 using ClientServerInterface.Server;
+using OGPPacManClient.Client.Chat;
 using OGPPacManClient.Interface;
 using Timer = System.Threading.Timer;
 
@@ -18,7 +19,9 @@ namespace OGPPacManClient.Client {
         private readonly Form1 form;
         private readonly int port;
         private readonly int serverPort;
+        private ChatController chatController;
         private MovementController moveController;
+
         private IPacmanServer server;
 
         public ClientManager(int port, int serverPort) {
@@ -32,13 +35,25 @@ namespace OGPPacManClient.Client {
 
         public void Start() {
             new Thread(() => Application.Run(form)).Start();
+
             RegisterTCPChannel();
             RegisterClientChannel();
             server = GetServerConnection();
-            var gameProps =
-                server.RegisterClient(new ClientInfo($"tcp://localhost:{port}/PacManClient", "")); //TODO what is name?
+
+            var clientInfo = new ClientInfo($"tcp://localhost:{port}", ""); //TODO what is name?
+            var gameProps = server.RegisterClient(clientInfo);
+            InitializeControllers(gameProps);
+        }
+
+        private void InitializeControllers(GameProps gameProps) {
             moveController = new MovementController(form, server, gameProps.GameSpeed, gameProps.UserId);
             moveController.Start();
+
+            chatController = new ChatController(gameProps.UserId);
+            client.NewConnectedClients += chatController.AddClients;
+            chatController.AddClients(client.ConnectedClients);
+            form.NewMessage += chatController.SendMessage;
+            chatController.IncomingMessage += form.AddMessage;
         }
 
         private void RegisterTCPChannel() {

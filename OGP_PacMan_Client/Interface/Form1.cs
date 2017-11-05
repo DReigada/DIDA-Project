@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using ClientServerInterface.PacMan.Server;
 
 namespace OGPPacManClient.Interface {
@@ -10,6 +11,7 @@ namespace OGPPacManClient.Interface {
         }
 
         public Movement.Direction Direction { get; private set; }
+        public event Action<string> NewMessage;
 
 
         private void KeyIsDown(object sender, KeyEventArgs e) {
@@ -46,12 +48,18 @@ namespace OGPPacManClient.Interface {
         }
 
         private void tbMsg_KeyDown(object sender, KeyEventArgs e) {
-            if (e.KeyCode == Keys.Enter){
-                tbChat.Text += "\r\n" + tbMsg.Text;
+            if (e.KeyCode == Keys.Enter && NewMessage != null){
+                var text = tbMsg.Text;
+                NewMessage.Invoke(text);
                 tbMsg.Clear();
                 tbMsg.Enabled = false;
                 Focus();
             }
+        }
+
+        public void AddMessage(string msg) {
+            Invoke((MethodInvoker) (() =>
+                tbChat.Text += "\r\n" + msg));
         }
     }
 }
