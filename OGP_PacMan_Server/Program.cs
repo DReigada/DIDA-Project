@@ -22,5 +22,6 @@ namespace OGP_PacMan_Server {
             Console.WriteLine("Press <enter> to exit");
             Console.ReadLine();
         }
+        
     }
 }

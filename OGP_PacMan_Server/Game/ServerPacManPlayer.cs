@@ -1,5 +1,4 @@
-﻿using System.Collections.Specialized;
-using ClientServerInterface.PacMan.Client.Game;
+﻿using ClientServerInterface.PacMan.Client.Game;
 
 namespace OGP_PacMan_Server.Game {
     public class ServerPacManPlayer : PacManPlayer {

@@ -3,6 +3,7 @@
 namespace ClientServerInterface.PacMan.Server {
     [Serializable]
     public class Movement {
+        [Serializable]
         public enum Direction {
             Up,
             Down,
