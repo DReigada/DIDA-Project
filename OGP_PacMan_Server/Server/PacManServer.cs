@@ -7,8 +7,9 @@ using ClientServerInterface.PacMan.Client;
 using ClientServerInterface.PacMan.Client.Game;
 using ClientServerInterface.PacMan.Server;
 using ClientServerInterface.Server;
+using OGP_PacMan_Server.Game;
 
-namespace OGP_PacMan_Server {
+namespace OGP_PacMan_Server.Server {
     public class PacManServer : MarshalByRefObject, IPacmanServer {
         private int gameSpeed;
 
@@ -20,6 +21,8 @@ namespace OGP_PacMan_Server {
 
         private List<IPacManClient> pacManClients;
 
+        private System.Timers.Timer gameTimer;
+
         public PacManServer(int gameSpeed, int numberPlayers) {
             this.gameSpeed = gameSpeed;
             this.numberPlayers = numberPlayers;
@@ -27,15 +30,18 @@ namespace OGP_PacMan_Server {
             pacManClients = new List<IPacManClient>();
             game = new PacManGame(numberPlayers);
 
-            System.Timers.Timer gameTimer = new System.Timers.Timer();
+            gameTimer = new System.Timers.Timer();
             gameTimer.Elapsed += new ElapsedEventHandler(TimeEvent);
             gameTimer.Interval = gameSpeed;
-            gameTimer.Start();
+            gameTimer.Enabled = true;
 
         }
 
         private void TimeEvent(object source, ElapsedEventArgs e) {
             game.NextState();
+            if (game.GameEnded) {
+                gameTimer.Enabled = false;
+            }
             UpdateState();
         }
 
