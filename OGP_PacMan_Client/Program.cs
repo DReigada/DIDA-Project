@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using OGPPacManClient.Client;
 
 namespace pacman {
@@ -10,8 +11,9 @@ namespace pacman {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-
-            var clientManager = new ClientManager(16004, 8086);
+            var port = new Random().Next(16000, 16210);
+            Console.WriteLine($"Using port: {port}");
+            var clientManager = new ClientManager(port, 8086);
             clientManager.Start();
         }
     }
