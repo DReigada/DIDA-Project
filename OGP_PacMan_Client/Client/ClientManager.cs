@@ -40,7 +40,7 @@ namespace OGPPacManClient.Client {
             RegisterClientChannel();
             server = GetServerConnection();
 
-            var clientInfo = new ClientInfo($"tcp://localhost:{port}", ""); //TODO what is name?
+            var clientInfo = new ClientInfo($"tcp://localhost:{port}"); //TODO what is name?
             var gameProps = server.RegisterClient(clientInfo);
             InitializeControllers(gameProps);
         }
@@ -74,7 +74,7 @@ namespace OGPPacManClient.Client {
         }
 
         // TODO: remove this, this is just for testing
-        public void Test() {
+      /*  public void Test() {
             Ghost[] g = {
                 new Ghost(GhostColor.Pink, new Position(25, 100), 1),
                 new Ghost(GhostColor.Yellow, new Position(100, 66), 2)
@@ -97,6 +97,6 @@ namespace OGPPacManClient.Client {
 
 
             var timer = new Timer(TestThread, null, 100, 10);
-        }
+        }*/
     }
 }

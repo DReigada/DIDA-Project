@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game\ServerPacManPlayer.cs" />
     <Compile Include="Game\ServerGhost.cs" />
     <Compile Include="Game\IGame.cs" />
     <Compile Include="Game\PacManGame.cs" />
