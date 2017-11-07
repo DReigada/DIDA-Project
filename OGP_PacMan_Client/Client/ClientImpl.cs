@@ -5,7 +5,7 @@ using ClientServerInterface.Client;
 using ClientServerInterface.PacMan.Client;
 using ClientServerInterface.PacMan.Client.Game;
 using OGPPacManClient.Interface;
-using OGPPacManClient.PuppetMaster;
+//using OGPPacManClient.PuppetMaster;
 
 namespace OGPPacManClient.Client {
     internal class ClientImpl : MarshalByRefObject, IPacManClient {
@@ -19,13 +19,13 @@ namespace OGPPacManClient.Client {
         public List<ConnectedClient> ConnectedClients { get; private set; }
 
         public void UpdateState(Board board) {
-            ClientPuppet.Wait();
+            //ClientPuppet.Wait();
             controller.Update(board);
         }
 
         //TODO This should be thread safe
         public void UpdateConnectedClients(List<ConnectedClient> clients) {
-            ClientPuppet.Wait();
+            //ClientPuppet.Wait();
             var newClients = clients.Where(client => !ConnectedClients.Exists(a => a.Id == client.Id))
                 .ToList();
             if (newClients.Count > 0) NewConnectedClients?.BeginInvoke(newClients, null, null);

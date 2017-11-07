@@ -16,6 +16,10 @@ namespace OGP_PacMan_Server.Game {
             Speed = speed;
         }
 
+        public int Width { get; } = 30;
+
+        public int Length { get; } = 30;
+
         public Speed Speed { get; }
     }
 }
