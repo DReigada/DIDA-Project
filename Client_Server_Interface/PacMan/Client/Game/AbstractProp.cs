@@ -14,12 +14,12 @@ namespace ClientServerInterface.PacMan.Client.Game {
 
     [Serializable]
     public abstract class AbstractProp {
-        public AbstractProp(int id, Position position) {
+        protected AbstractProp(int id, Position position) {
             Id = id;
             Position = position;
         }
 
-        public int Id { get; protected set; }
-        public Position Position { get; set; }
+        public int Id { get; }
+        public Position Position { get; }
     }
 }
