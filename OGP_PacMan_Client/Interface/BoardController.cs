@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using ClientServerInterface.PacMan.Client.Game;
+using ClientServerInterface.PacMan.Server;
 using OGPPacManClient.Properties;
 
 namespace OGPPacManClient.Interface {
     internal class BoardController {
+        private readonly Dictionary<int, PictureBox> coins;
         private readonly Form1 form;
 
         private readonly Dictionary<int, PictureBox> ghosts;
         private readonly Dictionary<int, PictureBox> players;
-        private readonly Dictionary<int, PictureBox> coins;
 
 
         public BoardController(Form1 form) {
@@ -46,8 +47,30 @@ namespace OGPPacManClient.Interface {
                         form.Controls.Add(pic);
                         dict.Add(prop.Id, pic);
                     }
+
+                    switch (prop){
+                        case PacManPlayer player:
+                            var pic = dict[player.Id];
+                            pic.Image = GetNewImage(player.Direction, pic);
+                            break;
+                    }
                 }
             );
+        }
+
+        private Image GetNewImage(Movement.Direction dir, PictureBox pic) {
+            switch (dir){
+                case Movement.Direction.Down:
+                    return Resources.Down;
+                case Movement.Direction.Left:
+                    return Resources.Left;
+                case Movement.Direction.Up:
+                    return Resources.Up;
+                case Movement.Direction.Right:
+                    return Resources.Right;
+                default:
+                    return pic.Image;
+            }
         }
 
         private PictureBox initGhost(Ghost ghost) {

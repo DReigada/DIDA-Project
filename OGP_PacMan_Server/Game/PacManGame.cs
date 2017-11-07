@@ -211,6 +211,7 @@ namespace OGP_PacMan_Server.Game {
                         case Movement.Direction.Stopped:
                             break;
                     }
+                    player.Direction = movement.Direct;
                 }
             }
             newMovements.Clear();
