@@ -21,6 +21,10 @@ namespace OGP_PacMan_Server.Game {
 
         private int rightBorder = 320;
 
+        private int playerSize = 25;
+
+        private int ghostSize = 30;
+
         private int coinSize = 22;
 
         private List<ConnectedClient> clients;
@@ -133,15 +137,13 @@ namespace OGP_PacMan_Server.Game {
 
                 PlayerMovement(player);
                 
-                /*
                 Coin coin = CheckCoin(player);
-
-                Console.WriteLine(coins.Count);
+                
                 if (coin != null) {
-                  coins.RemoveAt(coin.Id - 1);
-                }*/
-
-                if (CheckWallCollision(player)){
+                  coins.Remove(coin);
+                }
+                
+                if (CheckPlayerWallCollision(player)){
                     player.Alive = false;
                     continue;
                 }
@@ -159,7 +161,8 @@ namespace OGP_PacMan_Server.Game {
             foreach (ServerGhost ghost in ghosts) {
                 boardGhosts.Add(new Ghost(ghost.Color, ghost.Position, ghost.Id));
             }
-            
+
+            newMovements.Clear();
 
             Board = new Board(boardGhosts, players, coins);
         }
@@ -167,12 +170,12 @@ namespace OGP_PacMan_Server.Game {
         public void GhostMovement() {
             foreach (ServerGhost ghost in ghosts){
                 ghost.Position.X += ghost.Speed.X;
-                if (CheckWallCollision(ghost) || CheckGhostBorderCollision(ghost)){
+                if (CheckGhostWallCollision(ghost) || CheckGhostBorderCollision(ghost)){
                     ghost.Position.X -= ghost.Speed.X;
                     ghost.Speed.X = -ghost.Speed.X;
                 }
                 ghost.Position.Y += ghost.Speed.Y;
-                if (CheckWallCollision(ghost) || CheckGhostBorderCollision(ghost)){
+                if (CheckGhostWallCollision(ghost) || CheckGhostBorderCollision(ghost)){
                     ghost.Position.Y -= ghost.Speed.Y;
                     ghost.Speed.Y = -ghost.Speed.Y;
                 }
@@ -214,14 +217,24 @@ namespace OGP_PacMan_Server.Game {
                     player.Direction = movement.Direct;
                 }
             }
-            newMovements.Clear();
         }
 
-        public bool CheckWallCollision(AbstractProp prop) {
-            //TODO:Add pacman size
+        public bool CheckPlayerWallCollision(PacManPlayer player) {
+            //TODO:Test this
             foreach (Wall wall in walls){
-                if (((wall.Position.X - wall.Width < prop.Position.X) && (prop.Position.X < wall.Position.X))
-                    && ((wall.Position.Y < prop.Position.Y) && (prop.Position.Y < wall.Position.Y + wall.Length))){
+                if (((wall.Position.X - wall.Width <= player.Position.X) && (player.Position.X - playerSize <= wall.Position.X))
+                    && ((wall.Position.Y <= player.Position.Y + playerSize) && (player.Position.Y <= wall.Position.Y + wall.Length))){
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool CheckGhostWallCollision(ServerGhost ghost) {
+            //TODO:test
+            foreach (Wall wall in walls) {
+                if (((wall.Position.X - wall.Width <= ghost.Position.X) && (ghost.Position.X - ghostSize <= wall.Position.X))
+                    && ((wall.Position.Y <= ghost.Position.Y + ghostSize) && (ghost.Position.Y <= wall.Position.Y + wall.Length))) {
                     return true;
                 }
             }
@@ -229,10 +242,10 @@ namespace OGP_PacMan_Server.Game {
         }
 
         public bool CheckPlayerGhostCollision(PacManPlayer player) {
-            //TODO:Add pacman size
+            //FIXME: this is buggy
             foreach (ServerGhost ghost in ghosts) {
-                if (((ghost.Position.X - ghost.Width < player.Position.X) && (player.Position.X < ghost.Position.X))
-                    && ((ghost.Position.Y < player.Position.Y) && (player.Position.Y < ghost.Position.Y + ghost.Length))){
+                if (((ghost.Position.X - ghost.Width <= player.Position.X) && (player.Position.X <= ghost.Position.X))
+                    && ((ghost.Position.Y <= player.Position.Y) && (player.Position.Y <= ghost.Position.Y + ghost.Length))){
                     return true;
                 }
             }
@@ -240,9 +253,9 @@ namespace OGP_PacMan_Server.Game {
         }
 
         public bool CheckPlayerBorderCollision(PacManPlayer player) {
-            //TODO:Add pacman size
-            if (((rightBorder < player.Position.X) || (player.Position.X < leftBorder))
-                || ((lowerBorder < player.Position.Y) || (player.Position.Y < topBorder))){
+            //this is really bad...
+            if (((rightBorder <= player.Position.X) || (player.Position.X <= leftBorder))
+                || ((lowerBorder <= player.Position.Y) || (player.Position.Y <= topBorder))){
                 return true;
             }
             return false;
@@ -250,8 +263,8 @@ namespace OGP_PacMan_Server.Game {
 
         public bool CheckGhostBorderCollision(ServerGhost ghost) {
             //TODO: Ghost size
-            if (((rightBorder < ghost.Position.X) || (ghost.Position.X < leftBorder))
-                || ((lowerBorder < ghost.Position.Y) || (ghost.Position.Y < topBorder))) {
+            if (((rightBorder <= ghost.Position.X) || (ghost.Position.X <= leftBorder))
+                || ((lowerBorder <= ghost.Position.Y) || (ghost.Position.Y <= topBorder))) {
                 return true;
             }
             return false;
