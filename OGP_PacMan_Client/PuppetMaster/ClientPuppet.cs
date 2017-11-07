@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 
 namespace OGPPacManClient.PuppetMaster {
     public static class ClientPuppet {
@@ -23,6 +24,10 @@ namespace OGPPacManClient.PuppetMaster {
             lock (obj){
                 cond = true;
             }
+        }
+
+        public static void Kill() {
+            Environment.Exit(1);
         }
     }
 }
