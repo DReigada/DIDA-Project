@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ClientServerInterface.PacMan.Client.Game;
 using ClientServerInterface.PacMan.Server;
@@ -24,7 +26,8 @@ namespace OGPPacManClient.Interface {
         }
 
         public void Update(Board board) {
-            form.Invoke((MethodInvoker) (() => UpdatePositions(board)));
+            Task.Run(() =>
+                UpdatePositions(board));
         }
 
 
@@ -32,30 +35,47 @@ namespace OGPPacManClient.Interface {
             UpdateProps(updatedBoard.Ghosts, ghosts, initGhost);
             UpdateProps(updatedBoard.Players, players, initPlayer);
             UpdateProps(updatedBoard.Coins, coins, initCoin);
+            RemoveCoins(updatedBoard.Coins);
+        }
+
+        private void RemoveCoins(List<Coin> coinsToKeep) {
+            lock (coins){
+                var keyValuesToKeep = coinsToKeep.Select(a => new KeyValuePair<int, PictureBox>(a.Id, coins[a.Id]));
+                var removedCoins = coins.Except(keyValuesToKeep).ToList();
+                removedCoins.ForEach(keyValue => {
+                    coins.Remove(keyValue.Key);
+                    form.Invoke((MethodInvoker) (() => form.Controls.Remove(keyValue.Value)));
+                });
+            }
         }
 
 
         private void UpdateProps<A>(List<A> props, Dictionary<int, PictureBox> dict, Func<A, PictureBox> initProp)
             where A : AbstractProp {
-            props.ForEach(prop => {
-                    if (dict.TryGetValue(prop.Id, out var maybeProp)){
-                        maybeProp.Left = prop.Position.X;
-                        maybeProp.Top = prop.Position.Y;
-                    }
-                    else{
-                        var pic = initProp(prop);
-                        form.Controls.Add(pic);
-                        dict.Add(prop.Id, pic);
-                    }
+            lock (props){
+                props.ForEach(prop => {
+                    form.Invoke((MethodInvoker) (
+                        () => {
+                            if (dict.TryGetValue(prop.Id, out var maybeProp)){
+                                maybeProp.Left = prop.Position.X;
+                                maybeProp.Top = prop.Position.Y;
+                            }
+                            else{
+                                var pic = initProp(prop);
+                                dict.Add(prop.Id, pic);
+                                form.Controls.Add(pic);
+                            }
 
-                    switch (prop){
-                        case PacManPlayer player:
-                            var pic = dict[player.Id];
-                            pic.Image = GetNewImage(player.Direction, pic);
-                            break;
-                    }
-                }
-            );
+                            switch (prop){
+                                case PacManPlayer player:
+                                    var pic = dict[player.Id];
+                                    pic.Image = GetNewImage(player.Direction, pic);
+                                    break;
+                            }
+                        }
+                    ));
+                });
+            }
         }
 
         private Image GetNewImage(Movement.Direction dir, PictureBox pic) {
