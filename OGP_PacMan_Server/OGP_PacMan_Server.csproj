@@ -47,6 +47,7 @@
     <Compile Include="Game\ServerGhost.cs" />
     <Compile Include="Game\IGame.cs" />
     <Compile Include="Game\PacManGame.cs" />
+    <Compile Include="Game\Wall.cs" />
     <Compile Include="Server\PacManServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

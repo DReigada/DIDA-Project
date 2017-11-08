@@ -2,6 +2,7 @@
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
+using OGP_PacMan_Server.Server;
 
 namespace OGP_PacMan_Server {
     internal class Program {
@@ -22,5 +23,6 @@ namespace OGP_PacMan_Server {
             Console.WriteLine("Press <enter> to exit");
             Console.ReadLine();
         }
+        
     }
 }
