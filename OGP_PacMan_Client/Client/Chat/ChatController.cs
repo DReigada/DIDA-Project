@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.Remoting;
 using ClientServerInterface.Client;
 using OGPPacManClient.Interface;
-using OGPPacManClient.PuppetMaster;
+//using OGPPacManClient.PuppetMaster;
 
 namespace OGPPacManClient.Client.Chat {
     internal class ChatController : MarshalByRefObject, IRemoteChatController {
@@ -21,7 +21,7 @@ namespace OGPPacManClient.Client.Chat {
         }
 
         public void ReceiveMessage(ChatMessage msg) {
-            ClientPuppet.Wait();
+            //ClientPuppet.Wait();
             IncomingMessage?.BeginInvoke(msg.Content, null, null);
         }
 

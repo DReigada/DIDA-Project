@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
 
-namespace OGPPacManClient.PuppetMaster {
-    public static class ClientPuppet {
+namespace OGP_PacMan_Server.PuppetMaster {
+    public static class ServerPuppet {
         private static readonly object obj = new object();
         private static bool cond;
 
