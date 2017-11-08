@@ -1,6 +1,6 @@
 ﻿using ClientServerInterface.PacMan.Client.Game;
 
-namespace OGP_PacMan_Server.Game {
+namespace OGP_PacMan_Server.Game.PacMan {
     public class Speed {
         public Speed(int x, int y) {
             X = x;

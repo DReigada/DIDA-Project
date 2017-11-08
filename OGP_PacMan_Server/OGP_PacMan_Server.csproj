@@ -43,10 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Game\ServerGhost.cs" />
+    <Compile Include="Game\PacMan\ServerGhost.cs" />
     <Compile Include="Game\IGame.cs" />
-    <Compile Include="Game\PacManGame.cs" />
-    <Compile Include="Game\Wall.cs" />
+    <Compile Include="Game\PacMan\PacManGame.cs" />
+    <Compile Include="Game\PacMan\Wall.cs" />
+    <Compile Include="PuppetMaster\ServerPuppet.cs" />
     <Compile Include="Server\PacManServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

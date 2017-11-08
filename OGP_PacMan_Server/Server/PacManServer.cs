@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Timers;
 using ClientServerInterface.Client;
 using ClientServerInterface.PacMan.Client;
 using ClientServerInterface.PacMan.Client.Game;
 using ClientServerInterface.PacMan.Server;
 using ClientServerInterface.Server;
-using OGP_PacMan_Server.Game;
+using OGP_PacMan_Server.Game.PacMan;
+using OGP_PacMan_Server.PuppetMaster;
 
 namespace OGP_PacMan_Server.Server {
     public class PacManServer : MarshalByRefObject, IPacmanServer {
@@ -47,7 +47,7 @@ namespace OGP_PacMan_Server.Server {
         }
 
         public GameProps RegisterClient(ClientInfo client) {
-
+            ServerPuppet.Wait();
             Console.WriteLine(client.Url);
             clients.Add(new ConnectedClient(clients.Count + 1, client.Url));
 
@@ -67,11 +67,12 @@ namespace OGP_PacMan_Server.Server {
         }
 
         public void SendAction(Movement movement) {
+            ServerPuppet.Wait();
             game.AddMovements(movement);
         }
 
         public void UpdateState() {
-            Board board = game.Board;
+            Board board = game.State;
             foreach (IPacManClient pacManClient in pacManClients){
                 pacManClient.UpdateState(board);
             }
