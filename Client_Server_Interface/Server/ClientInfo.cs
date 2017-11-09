@@ -1,5 +1,12 @@
-﻿namespace ClientServerInterface.Server {
+﻿using System;
+
+namespace ClientServerInterface.Server {
+    [Serializable]
     public class ClientInfo {
-        // TODO: add necessary fields here
+        public ClientInfo(string url) {
+            Url = url;
+        }
+
+        public string Url { get; }
     }
 }

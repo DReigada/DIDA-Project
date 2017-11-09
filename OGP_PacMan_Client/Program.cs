@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using OGPPacManClient.Client;
 
-namespace OGP_PacMan_Client
-{
-    static class Program
-    {
+namespace pacman {
+    internal static class Program {
         /// <summary>
-        /// The main entry point for the application.
+        ///     The main entry point for the application.
         /// </summary>
-        [STAThread]
-        static void Main()
-        {
+        private static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+
+            var port = new Random().Next(16000, 16210);
+            Console.WriteLine($"Using port: {port}");
+            var clientManager = new ClientManager(port, 8086);
+            clientManager.Start();
         }
     }
 }

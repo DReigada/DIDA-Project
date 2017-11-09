@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OGP_PacMan_Client", "OGP_PacMan_Client\OGP_PacMan_Client.csproj", "{69C0E5AE-25AE-4DD1-81BC-55D0286834D4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientServerInterface", "Client_Server_Interface\ClientServerInterface.csproj", "{2E2EC792-C84B-4DF0-BFA7-F4B94C52D42B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OGP_PacMan_Client", "OGP_PacMan_Client\OGP_PacMan_Client.csproj", "{ECE5A838-E181-493A-B9A2-6ADD01DE37F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OGP_PacMan_Server", "OGP_PacMan_Server\OGP_PacMan_Server.csproj", "{8546596E-F20B-4EBB-8A53-72C2F660329E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +15,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{69C0E5AE-25AE-4DD1-81BC-55D0286834D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{69C0E5AE-25AE-4DD1-81BC-55D0286834D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{69C0E5AE-25AE-4DD1-81BC-55D0286834D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{69C0E5AE-25AE-4DD1-81BC-55D0286834D4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2E2EC792-C84B-4DF0-BFA7-F4B94C52D42B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2E2EC792-C84B-4DF0-BFA7-F4B94C52D42B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E2EC792-C84B-4DF0-BFA7-F4B94C52D42B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E2EC792-C84B-4DF0-BFA7-F4B94C52D42B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECE5A838-E181-493A-B9A2-6ADD01DE37F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECE5A838-E181-493A-B9A2-6ADD01DE37F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECE5A838-E181-493A-B9A2-6ADD01DE37F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECE5A838-E181-493A-B9A2-6ADD01DE37F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8546596E-F20B-4EBB-8A53-72C2F660329E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8546596E-F20B-4EBB-8A53-72C2F660329E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8546596E-F20B-4EBB-8A53-72C2F660329E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8546596E-F20B-4EBB-8A53-72C2F660329E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
