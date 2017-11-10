@@ -1,7 +1,7 @@
                                     DIDA-PROJECT
                                 Online Gaming Platform
 
-Intraduction
+Introduction
 ------------
 
 This project is a simplified real-time distributed gaming platform. 
