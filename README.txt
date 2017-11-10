@@ -21,3 +21,10 @@ server you start as many instances of OGP_PacMan_Client as the
 number of players you selected. After all the players are connected
 the game will start.
 
+
+Missing Features
+----------------
+- Causal order on the clients' chat
+- Fault tolerance
+- Connecting the Puppet Master to the client and server
+- Implementing some parts of the puppet master
