@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Linq;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Threading;
 using System.Windows.Forms;
-using ClientServerInterface.PacMan.Client.Game;
 using ClientServerInterface.PacMan.Server;
 using ClientServerInterface.Server;
 using OGPPacManClient.Client.Chat;
+using OGPPacManClient.Client.Movement;
 using OGPPacManClient.Interface;
-using Timer = System.Threading.Timer;
 
 namespace OGPPacManClient.Client {
     internal class ClientManager {
@@ -20,8 +18,8 @@ namespace OGPPacManClient.Client {
         private readonly int port;
         private readonly int serverPort;
         private ChatController chatController;
-        private MovementController moveController;
-
+        private AbstractMovementController moveController;
+        private string movementFile;
         private IPacmanServer server;
 
         public ClientManager(int port, int serverPort) {
@@ -45,8 +43,17 @@ namespace OGPPacManClient.Client {
             InitializeControllers(gameProps);
         }
 
+        public void UseMovementFile(string file) {
+            movementFile = file;
+        }
+
         private void InitializeControllers(GameProps gameProps) {
-            moveController = new MovementController(form, server, gameProps.GameSpeed, gameProps.UserId);
+            if (movementFile != null)
+                moveController =
+                    new FileMovementController(movementFile, server, gameProps.GameSpeed, gameProps.UserId);
+            else
+                moveController = new MovementController(form, server, gameProps.GameSpeed, gameProps.UserId);
+
             moveController.Start();
 
             chatController = new ChatController(gameProps.UserId);
@@ -74,7 +81,7 @@ namespace OGPPacManClient.Client {
         }
 
         // TODO: remove this, this is just for testing
-      /*  public void Test() {
+        /*  public void Test() {
             Ghost[] g = {
                 new Ghost(GhostColor.Pink, new Position(25, 100), 1),
                 new Ghost(GhostColor.Yellow, new Position(100, 66), 2)

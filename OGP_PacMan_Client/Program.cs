@@ -14,6 +14,7 @@ namespace pacman {
             var port = new Random().Next(16000, 16210);
             Console.WriteLine($"Using port: {port}");
             var clientManager = new ClientManager(port, 8086);
+            //clientManager.UseMovementFile(@"C:\Users\Public\test.txt");
             clientManager.Start();
         }
     }
