@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Threading;
+using OGPServices;
 
 namespace OGP_PacMan_Server.PuppetMaster {
-    public static class ServerPuppet {
+    public class ServerPuppet : MarshalByRefObject, IProcesses {
         private static readonly object obj = new object();
         private static bool cond;
 
@@ -13,20 +14,40 @@ namespace OGP_PacMan_Server.PuppetMaster {
             }
         }
 
-        public static void Release() {
+        public void InjectDelay() {
+            throw new NotImplementedException();
+        }
+
+        public void Unfreeze() {
             lock (obj){
                 cond = false;
                 Monitor.PulseAll(cond);
             }
         }
 
-        public static void Lock() {
+        void IProcesses.Wait() {
+            Wait();
+        }
+
+        public void Crash() {
+            throw new NotImplementedException();
+        }
+
+        public void Freeze() {
             lock (obj){
                 cond = true;
             }
         }
 
-        public static void Kill() {
+        public void GlobalStatus() {
+            throw new NotImplementedException();
+        }
+
+        public void LocalStatus() {
+            throw new NotImplementedException();
+        }
+
+        public void Kill() {
             Environment.Exit(1);
         }
     }
