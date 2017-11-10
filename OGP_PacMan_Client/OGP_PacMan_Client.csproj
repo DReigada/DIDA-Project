@@ -131,8 +131,11 @@
       <Project>{2e2ec792-c84b-4df0-bfa7-f4b94c52d42b}</Project>
       <Name>ClientServerInterface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OGPServices\OGPServices.csproj">
+      <Project>{d8db8b38-c883-47f5-be5d-1b3bdd349ecb}</Project>
+      <Name>OGPServices</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

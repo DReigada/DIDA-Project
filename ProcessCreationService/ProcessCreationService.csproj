@@ -49,5 +49,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OGPServices\OGPServices.csproj">
+      <Project>{d8db8b38-c883-47f5-be5d-1b3bdd349ecb}</Project>
+      <Name>OGPServices</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

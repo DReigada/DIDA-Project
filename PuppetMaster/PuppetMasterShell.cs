@@ -5,18 +5,31 @@ using System.Text;
 using System.Threading.Tasks;
 using PuppetMaster.commands;
 using System.Threading;
+using OGPServices;
+using System.Runtime.Remoting.Channels.Tcp;
 
 namespace PuppetMaster {
-    class PuppetMasterShell {
+    class PuppetMasterShell : MarshalByRefObject {
         private string prompt = "[PuppetMaster] >>> ";
+        
+        public Dictionary<string, List<IProcesses>> processesProxies { get; }
 
         public List<Command> commands {
             get;
         }
 
         public PuppetMasterShell() {
-
             commands = new List<Command>();
+
+            processesProxies = new Dictionary<string, List<IProcesses>>();
+
+            //List<IProcesses> pProxies = new List<IProcesses>();
+            //string URL = $"tcp://localhost:{8086}/PuppetMaster";
+            //IProcesses remoteProcesses = (IProcesses)Activator.GetObject(typeof(IProcesses), URL);
+            //pProxies.Add(remoteProcesses);
+            //Console.WriteLine("[PuppetMaster] Proxu created at {0}", URL);
+
+
 
             commands.Add(new Crash(this));
             commands.Add(new Freeze(this));
@@ -31,6 +44,7 @@ namespace PuppetMaster {
             commands.Add(new Exit(this));
 
         }
+
 
         public Command getCommand(string input){
             foreach (Command cmd in commands) {

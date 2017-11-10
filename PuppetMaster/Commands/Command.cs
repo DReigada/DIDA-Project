@@ -21,8 +21,7 @@ namespace PuppetMaster.commands {
             set;
         }
 
-        public Command(PuppetMasterShell shell, string cmd, string info)
-        {
+        public Command(PuppetMasterShell shell, string cmd, string info){
             this.shell = shell;
             this.cmd = cmd;
             this.info = info;
@@ -30,7 +29,7 @@ namespace PuppetMaster.commands {
 
         abstract public void Execute(string[] args);
 
-        public void printErrorMsg(string[] args) {
+        public void printErrorMsg() {
             Console.Write("[ERROR]: In {0} command. For more info type <Help>\n", cmd);
         }
     }

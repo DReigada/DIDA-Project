@@ -10,7 +10,7 @@ namespace PuppetMaster.commands {
 
         public override void Execute(string[] args) {
             if (args.Length != 0){
-                printErrorMsg(args);
+                printErrorMsg();
                 return;
             }
             Console.WriteLine("Here are the commands available followed by their args:");

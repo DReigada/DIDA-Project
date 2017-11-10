@@ -1,32 +1,48 @@
 ﻿using System;
 using System.Threading;
+using OGPServices;
 
 namespace OGPPacManClient.PuppetMaster {
-    public static class ClientPuppet {
+    public class ClientPuppet : MarshalByRefObject, IProcesses {
         private static readonly object obj = new object();
         private static bool cond;
 
-
-        public static void Wait() {
+        public void Wait() {
             lock (obj){
                 while (cond) Monitor.Wait(obj);
             }
         }
 
-        public static void Release() {
+        public void InjectDelay() {
+            throw new NotImplementedException();
+        }
+
+        public void Unfreeze() {
             lock (obj){
                 cond = false;
                 Monitor.PulseAll(cond);
             }
         }
 
-        public static void Lock() {
+        public void Crash() {
+            throw new NotImplementedException();
+        }
+
+        public void Freeze() {
             lock (obj){
                 cond = true;
             }
         }
 
-        public static void Kill() {
+        public void GlobalStatus() {
+            throw new NotImplementedException();
+        }
+
+        public void LocalStatus() {
+            throw new NotImplementedException();
+        }
+
+        public void Kill() {
             Environment.Exit(1);
         }
     }
