@@ -54,6 +54,10 @@ namespace OGP_PacMan_Server.Server {
             IPacManClient pacManClient = (IPacManClient) Activator.GetObject(typeof(IPacManClient), client.Url + "/PacManClient");
             pacManClients.Add(pacManClient);
 
+            ThreadStart updateClient = UpdateConnectedClients;
+            Thread updateThread = new Thread(updateClient);
+            updateThread.Start();
+
             GameProps props = new GameProps(gameSpeed, numberPlayers, clients.Count);
             if (clients.Count == numberPlayers){
                 game.Start(clients);
