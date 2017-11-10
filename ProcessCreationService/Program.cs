@@ -54,7 +54,7 @@ namespace ProcessCreationService {
 
             public void RegisterPM(string ip) {
                 /*
-                 PuppetMasterChannel = new TcpChannel(PUT, null, null);
+                 PuppetMasterChannel = new TcpChannel(, null, null);
                  ChannelServices.RegisterChannel(PuppetMasterChannel, false);
                  PuppetMaster = (IPuppetMaster)Activator.GetObject(
                      typeof(IPuppetMaster),
