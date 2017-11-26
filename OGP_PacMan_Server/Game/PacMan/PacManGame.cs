@@ -132,7 +132,6 @@ namespace OGP_PacMan_Server.Game.PacMan {
             foreach (PacManPlayer player in players ){
                 //Check if player is alive
                 if (!player.Alive){
-                    Console.WriteLine(player.Id);
                     continue;
                 }
 
