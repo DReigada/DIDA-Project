@@ -29,9 +29,9 @@ namespace OGP_PacMan_Server.Game.PacMan {
 
         private List<ConnectedClient> clients;
 
-        private List<Movement> newMovements;
+        public List<Movement> NewMovements { get;}
 
-        public Board State { get; private set; }
+        public Board State { get; set; }
 
         public bool GameEnded { get; private set; }
 
@@ -49,7 +49,8 @@ namespace OGP_PacMan_Server.Game.PacMan {
             ghosts = new List<ServerGhost>();
             players = new List<PacManPlayer>();
             walls = new List<Wall>();
-            newMovements = new List<Movement>();
+            NewMovements = new List<Movement>();
+            State = null;
             GameEnded = false;
         }
 
@@ -164,7 +165,7 @@ namespace OGP_PacMan_Server.Game.PacMan {
                 boardGhosts.Add(new Ghost(ghost.Color, ghost.Position, ghost.Id));
             }
 
-            newMovements.Clear();
+            NewMovements.Clear();
 
             State = new Board(boardGhosts, players, coins);
         }
@@ -186,8 +187,8 @@ namespace OGP_PacMan_Server.Game.PacMan {
 
         public void PlayerMovement(PacManPlayer player) {
             //Player Movements
-            lock (newMovements) {
-                foreach (Movement movement in newMovements){
+            lock (NewMovements) {
+                foreach (Movement movement in NewMovements){
                     if (movement.Id == player.Id){
                         switch (movement.Direct){
                             case Movement.Direction.Down:
@@ -283,8 +284,8 @@ namespace OGP_PacMan_Server.Game.PacMan {
         }
 
         public void AddMovements(Movement movement) {
-            lock (newMovements){
-                newMovements.Add(movement);
+            lock (NewMovements){
+                NewMovements.Add(movement);
             }
         }
         
