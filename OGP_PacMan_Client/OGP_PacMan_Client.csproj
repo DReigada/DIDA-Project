@@ -58,7 +58,9 @@
     <Compile Include="Client\Chat\IRemoteChatController.cs" />
     <Compile Include="Client\ClientImpl.cs" />
     <Compile Include="Client\ClientManager.cs" />
-    <Compile Include="Client\MovementController.cs" />
+    <Compile Include="Client\Movement\AbstractMovementController.cs" />
+    <Compile Include="Client\Movement\FileMovementController.cs" />
+    <Compile Include="Client\Movement\MovementController.cs" />
     <Compile Include="Interface\BoardController.cs" />
     <Compile Include="Interface\Form1.cs">
       <SubType>Form</SubType>

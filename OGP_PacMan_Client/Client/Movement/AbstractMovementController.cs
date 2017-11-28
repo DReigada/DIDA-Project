@@ -1,30 +1,29 @@
 ﻿using System.Timers;
 using ClientServerInterface.PacMan.Server;
-using OGPPacManClient.Interface;
 
-namespace OGPPacManClient.Client {
-    internal class MovementController {
-        private readonly Form1 form;
+namespace OGPPacManClient.Client.Movement {
+    public abstract class AbstractMovementController {
         private readonly IPacmanServer server;
         private readonly Timer timer;
         private readonly int userId;
 
-        public MovementController(Form1 form, IPacmanServer server, int delta, int userId) {
+        protected AbstractMovementController(IPacmanServer server, int delta, int userId) {
             this.userId = userId;
-            this.form = form;
             this.server = server;
             timer = new Timer(delta) {AutoReset = true};
             timer.Elapsed += (sender, args) => NotifyServer();
         }
+
+        public abstract ClientServerInterface.PacMan.Server.Movement.Direction GetDirection();
 
         public void Start() {
             timer.Start();
         }
 
         public void NotifyServer() {
-            var dir = form.Direction;
-            if (dir != Movement.Direction.Stopped){
-                var mov = new Movement(userId, dir);
+            var dir = GetDirection();
+            if (dir != ClientServerInterface.PacMan.Server.Movement.Direction.Stopped){
+                var mov = new ClientServerInterface.PacMan.Server.Movement(userId, dir);
                 server.SendAction(mov);
             }
         }

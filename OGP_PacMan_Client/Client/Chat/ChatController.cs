@@ -12,7 +12,6 @@ namespace OGPPacManClient.Client.Chat {
         private const string EndpointName = "ClientChat";
         private readonly IDictionary<int, IRemoteChatController> otherClients;
         private readonly int SelfId;
-        private Form1 form;
 
         public ChatController(int selfId) {
             SelfId = selfId;
