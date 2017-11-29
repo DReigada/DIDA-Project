@@ -4,7 +4,7 @@ using System.Text;
 
 namespace OGPServices {
     public interface IProcessCreationService {
-        void CreateProcess();
-        void RegisterPM(string url);
+        void createClient(String pid, String pcsURL, String clientURL, String roundTime, String numPlayers);
+        void createServer(String pid, String pcsURL, String serverURL, String roundTime, String numPlayers);
     }
 }

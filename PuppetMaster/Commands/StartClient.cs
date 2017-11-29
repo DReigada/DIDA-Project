@@ -10,7 +10,8 @@ namespace PuppetMaster.commands {
         }
 
         public override void Execute(string[] args) {
-            throw new NotImplementedException();
+            // Console.WriteLine("[PuppetMaster] STARTING SERVER");
+            shell.pcs.createClient(args[0], "tcp://localhost:11000/ProcessCreationService", args[2], args[3], args[4]);
         }
     }
 }
