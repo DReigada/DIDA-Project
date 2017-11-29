@@ -9,6 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OGP_PacMan_Client", "OGP_Pa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OGP_PacMan_Server", "OGP_PacMan_Server\OGP_PacMan_Server.csproj", "{8546596E-F20B-4EBB-8A53-72C2F660329E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuppetMaster", "PuppetMaster\PuppetMaster.csproj", "{65B93994-4490-450B-BE76-3B9DD8CECC15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessCreationService", "ProcessCreationService\ProcessCreationService.csproj", "{ECCD6F9D-F64C-4E0E-9F4F-88BFCEF9B692}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OGPServices", "OGPServices\OGPServices.csproj", "{D8DB8B38-C883-47F5-BE5D-1B3BDD349ECB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +33,18 @@ Global
 		{8546596E-F20B-4EBB-8A53-72C2F660329E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8546596E-F20B-4EBB-8A53-72C2F660329E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8546596E-F20B-4EBB-8A53-72C2F660329E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65B93994-4490-450B-BE76-3B9DD8CECC15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65B93994-4490-450B-BE76-3B9DD8CECC15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65B93994-4490-450B-BE76-3B9DD8CECC15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65B93994-4490-450B-BE76-3B9DD8CECC15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECCD6F9D-F64C-4E0E-9F4F-88BFCEF9B692}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECCD6F9D-F64C-4E0E-9F4F-88BFCEF9B692}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECCD6F9D-F64C-4E0E-9F4F-88BFCEF9B692}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECCD6F9D-F64C-4E0E-9F4F-88BFCEF9B692}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8DB8B38-C883-47F5-BE5D-1B3BDD349ECB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8DB8B38-C883-47F5-BE5D-1B3BDD349ECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8DB8B38-C883-47F5-BE5D-1B3BDD349ECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8DB8B38-C883-47F5-BE5D-1B3BDD349ECB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
