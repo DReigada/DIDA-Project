@@ -13,6 +13,8 @@ namespace OGPPacManClient.Client.Chat {
         private readonly IDictionary<int, IRemoteChatController> otherClients;
         private readonly int SelfId;
 
+        private 
+
         public ChatController(int selfId) {
             SelfId = selfId;
             otherClients = new ConcurrentDictionary<int, IRemoteChatController>();
