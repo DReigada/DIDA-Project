@@ -4,5 +4,4 @@
 
         void SendAction(TAction action);
     }
-
 }
