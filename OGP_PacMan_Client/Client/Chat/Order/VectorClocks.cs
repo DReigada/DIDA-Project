@@ -26,10 +26,10 @@ namespace OGPPacManClient.Client.Chat {
         private readonly IDictionary<(int SenderId, int MsgId), WrappedMessage<M>> messagesToDeliver;
         private readonly int selfId;
 
-        public VectorClocks(int selfId, Func<M, int> getSenderIdFunc) {
+        public VectorClocks(int selfId, Func<M, int> getSenderIdFunc, String endpointName) {
             clocksVector = new Dictionary<int, int>();
             messagesToDeliver = new Dictionary<(int SenderId, int MsgId), WrappedMessage<M>>();
-            broadcast = new ReliableBroadcast<WrappedMessage<M>>(selfId);
+            broadcast = new ReliableBroadcast<WrappedMessage<M>>(selfId, endpointName);
             this.getSenderIdFunc = getSenderIdFunc;
             this.selfId = selfId;
         }
@@ -47,13 +47,13 @@ namespace OGPPacManClient.Client.Chat {
 
         public void SendMessage(M message) {
             lock (this){
-                MessageReady.Invoke(message);
                 clocksVector[selfId] += 1;
                 var wrap = new WrappedMessage<M>(message, selfId, clocksVector[selfId],
                     clocksVector.Select(a => (a.Key, a.Value)).ToArray());
                 broadcast.SendMessage(wrap);
             }
         }
+
 
         private void DoDeliver() {
             // C# does not like tail recursion :(
