@@ -49,7 +49,7 @@ namespace ProcessCreationService {
                 startinfo.WorkingDirectory = @"..\..\..\OGP_PacMan_Client\bin\Debug\";
                 startinfo.FileName = @"OGP_PacMan_Client.exe";
 
-                //startinfo.Arguments = pid + " " + clientURL + " " + roundTime + " " + numPlayers;
+                //startinfo.Arguments = //pid + " " + clientURL + " " + roundTime + " " + numPlayers;
                 startinfo.WindowStyle = ProcessWindowStyle.Normal;
                 Process myProcess = new Process();
                 myProcess.StartInfo = startinfo;
@@ -73,7 +73,7 @@ namespace ProcessCreationService {
                 startinfo.UseShellExecute = true;
                 startinfo.WorkingDirectory = @"..\..\..\OGP_PacMan_Server\bin\Debug\";
                 startinfo.FileName = @"OGP_PacMan_Server.exe";
-                startinfo.Arguments = "PacMan " + roundTime + " " + numPlayers + " " + ip + " " + port;
+                startinfo.Arguments = "Pacman " + roundTime + " " + numPlayers + " " + ip + " " + port;
                 startinfo.WindowStyle = ProcessWindowStyle.Normal;
                 Process myProcess = new Process();
                 myProcess.StartInfo = startinfo;

@@ -19,7 +19,8 @@ namespace PuppetMaster
         public static readonly string CONFIG_FOLDER_PATH = @"..\..\Resources\Config\";
         public static readonly string CONFIG_FILE_NAME = @"dad-ogp.config";
 
-        static void Main(string[] args) {l channel = new TcpChannel(Port);
+        static void Main(string[] args) {
+            /*channel = new TcpChannel(Port);
             ChannelServices.RegisterChannel(channel, false);
             RemotingConfiguration.RegisterWellKnownServiceType(
                  typeof(PuppetMasterService),
