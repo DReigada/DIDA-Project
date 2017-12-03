@@ -105,7 +105,7 @@ namespace OGP_PacMan_Server.Server {
 
         public GameProps RegisterClient(ClientInfo client) {
             ServerPuppet.Wait();
-            lock (clients) {
+            lock (pacManClients) {
                 foreach (var slave in slaves) {
                     Console.WriteLine("here");
                     slave.RegisterClient(client);
@@ -220,7 +220,9 @@ namespace OGP_PacMan_Server.Server {
         }
 
         public void UpdateConnectedClients() {
-            foreach (var pacManClient in pacManClients) pacManClient.UpdateConnectedClients(clients);
+            lock (pacManClients) {
+                foreach (var pacManClient in pacManClients) pacManClient.UpdateConnectedClients(clients);
+            }
         }
     }
 }
