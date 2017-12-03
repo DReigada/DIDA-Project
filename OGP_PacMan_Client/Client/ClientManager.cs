@@ -28,7 +28,9 @@ namespace OGPPacManClient.Client {
 
             form = new Form1();
             controller = new BoardController(form);
-            client = new ClientImpl(controller);
+
+           
+            client = new ClientImpl(controller, UpdateServer);
         }
 
         public void Start() {
@@ -78,6 +80,13 @@ namespace OGPPacManClient.Client {
                 Activator.GetObject(
                     typeof(IPacmanServer),
                     $"tcp://localhost:{serverPort}/PacManServer");
+        }
+        
+
+        private void UpdateServer(String url) {
+            Console.WriteLine(url);
+            server = (IPacmanServer) Activator.GetObject( typeof(IPacmanServer), url + "/PacManServer");
+            moveController.setNewServer(server);
         }
 
         // TODO: remove this, this is just for testing
