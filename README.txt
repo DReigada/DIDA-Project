@@ -24,7 +24,22 @@ the game will start.
 
 Missing Features
 ----------------
-- Causal order on the clients' chat
-- Fault tolerance
-- Connecting the Puppet Master to the client and server
-- Implementing some parts of the puppet master
+- Causal order on the clients' chat with vector clocks - Daniel
+- Fault tolerance:
+    -Passive Replication server-side - Diogo
+    -Server-side support clients death - Diogo
+    -Causal order vector clock handle fault tolerance - Daniel/(help will be needed)
+- Connecting the Puppet Master to the client and server - Diogo/Daniel
+- Finish implementing Puppet Master and PCS - Pedro
+- Finish implementing ClientPuppet - Daniel
+- Finish implementing ServerPuppet - Diogo
+
+DeadLine: 30 November
+
+FIX:
+---
+-Concurrent server problems (server add new client)
+-Input file for client from args
+-Input file accepting keys after reading input file
+-Server recieve in args the ip
+-Client recieve in args the ip
