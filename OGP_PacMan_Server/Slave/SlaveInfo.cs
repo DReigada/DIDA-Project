@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OGP_PacMan_Server.ISlave {
+namespace OGP_PacMan_Server.Slave {
     [Serializable]
     public class SlaveInfo {
         public SlaveInfo(string url) {

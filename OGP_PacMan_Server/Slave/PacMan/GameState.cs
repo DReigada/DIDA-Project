@@ -4,7 +4,7 @@ using ClientServerInterface.PacMan.Client;
 using ClientServerInterface.PacMan.Client.Game;
 using ClientServerInterface.PacMan.Server;
 
-namespace OGP_PacMan_Server.ISlave.PacMan {
+namespace OGP_PacMan_Server.Slave.PacMan {
     [Serializable]
     public class GameState {
         public GameState(Board board, List<IPacManClient> pacManClients, List<Movement> newMovements) {

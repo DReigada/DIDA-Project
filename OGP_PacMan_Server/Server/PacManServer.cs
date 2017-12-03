@@ -10,9 +10,9 @@ using ClientServerInterface.PacMan.Client.Game;
 using ClientServerInterface.PacMan.Server;
 using ClientServerInterface.Server;
 using OGP_PacMan_Server.Game.PacMan;
-using OGP_PacMan_Server.ISlave;
-using OGP_PacMan_Server.ISlave.PacMan;
+using OGP_PacMan_Server.Slave;
 using OGP_PacMan_Server.PuppetMaster;
+using OGP_PacMan_Server.Slave.PacMan;
 using Timer = System.Timers.Timer;
 
 namespace OGP_PacMan_Server.Server {
@@ -179,7 +179,7 @@ namespace OGP_PacMan_Server.Server {
                     Console.WriteLine(clients.Count);
                     foreach (IPacManClient client in pacManClients ) {
                         Console.WriteLine(url);
-                        client.UpdateServer(new ServerInfo(url));
+                        client.UpdateServer(new ClientServerInterface.Client.ServerInfo(url));
                     }
                     proofTimer.Enabled = false;
                     Console.WriteLine(isMaster);

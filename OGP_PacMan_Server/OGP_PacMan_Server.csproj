@@ -47,10 +47,10 @@
     <Compile Include="Game\IGame.cs" />
     <Compile Include="Game\PacMan\PacManGame.cs" />
     <Compile Include="Game\PacMan\Wall.cs" />
-    <Compile Include="ISlave\SlaveInfo.cs" />
-    <Compile Include="ISlave\ISlave.cs" />
-    <Compile Include="ISlave\PacMan\GameState.cs" />
-    <Compile Include="ISlave\PacMan\IPacManSlave.cs" />
+    <Compile Include="Slave\SlaveInfo.cs" />
+    <Compile Include="Slave\ISlave.cs" />
+    <Compile Include="Slave\PacMan\GameState.cs" />
+    <Compile Include="Slave\PacMan\IPacManSlave.cs" />
     <Compile Include="PuppetMaster\ServerPuppet.cs" />
     <Compile Include="Server\PacManServer.cs" />
     <Compile Include="Program.cs" />
