@@ -1,5 +1,7 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using System.Threading;
 using System.Timers;
 using ClientServerInterface.Client;
@@ -23,7 +25,7 @@ namespace OGP_PacMan_Server.Server {
 
         private readonly Timer gameTimer;
 
-        private readonly bool isMaster;
+        private  bool isMaster;
 
         private TimeSpan LastProof;
 
@@ -120,7 +122,6 @@ namespace OGP_PacMan_Server.Server {
                 ThreadStart theardStart = UpdateState;
                 var thread = new Thread(theardStart);
                 thread.Start();
-                //add notify slave
                 UpdateState();
                 gameTimer.Enabled = true;
             }
@@ -133,9 +134,10 @@ namespace OGP_PacMan_Server.Server {
             game.AddMovements(movement);
         }
 
+        //will probably remove this
         public void UpdatSlaveClient(ClientInfo clientInfo) {
         }
-
+        //will probably remove this
         public void SendSlaveAction(Movement movement) {
         }
 
@@ -164,6 +166,16 @@ namespace OGP_PacMan_Server.Server {
             }
             else{
                 Console.WriteLine(DateTime.Now.TimeOfDay.Subtract(LastProof));
+                TimeSpan diff = DateTime.Now.TimeOfDay.Subtract(LastProof);
+                Console.WriteLine(diff.TotalSeconds);
+                if (diff.TotalSeconds > 5){
+                    isMaster = true;
+                    foreach (IPacManSlave client in pacManClients ){
+                        //client.NewServer
+                    }
+                    proofTimer.Enabled = false;
+                    Console.WriteLine(isMaster);
+                }
             }
         }
 
@@ -182,7 +194,12 @@ namespace OGP_PacMan_Server.Server {
 
         public void UpdateState() {
             var board = game.State;
-            foreach (var pacManClient in pacManClients) pacManClient.UpdateState(board);
+            try{
+                foreach (var pacManClient in pacManClients) pacManClient.UpdateState(board);
+            }
+            catch (SocketException e){
+                Console.WriteLine("Client died");
+            }
             //if (isMaster){
             //}
         }

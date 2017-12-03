@@ -11,9 +11,14 @@ namespace OGPPacManClient.Client {
     internal class ClientImpl : MarshalByRefObject, IPacManClient {
         private readonly BoardController controller;
 
-        public ClientImpl(BoardController controller) {
+        public delegate void ChangeServerDel(string url);
+
+        public ChangeServerDel handler;
+
+        public ClientImpl(BoardController controller, ChangeServerDel hanlder) {
             this.controller = controller;
             ConnectedClients = new List<ConnectedClient>();
+            this.handler = hanlder;
         }
 
         public List<ConnectedClient> ConnectedClients { get; private set; }
@@ -30,6 +35,10 @@ namespace OGPPacManClient.Client {
                 .ToList();
             if (newClients.Count > 0) NewConnectedClients?.BeginInvoke(newClients, null, null);
             ConnectedClients = clients;
+        }
+
+        public void UpdateServer(ServerInfo serverInfo) {
+            handler(serverInfo.Url);
         }
 
         public event Action<List<ConnectedClient>> NewConnectedClients;

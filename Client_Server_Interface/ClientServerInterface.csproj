@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\ServerInfo.cs" />
     <Compile Include="PacMan\Client\Game\Board.cs" />
     <Compile Include="Client\ConnectedClient.cs" />
     <Compile Include="Client\IClient.cs" />
