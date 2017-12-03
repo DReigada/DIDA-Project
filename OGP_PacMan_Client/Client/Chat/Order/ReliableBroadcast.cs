@@ -17,7 +17,7 @@ namespace OGPPacManClient.Client.Chat.Order {
 
 
         public override void SendMessage(M message) {
-            lock (this){
+            lock (this) {
                 CallReceivedMessage(message);
                 counter++;
                 var wrappedMessage = new WrappedMessage<M>(message, selfId, counter);
@@ -30,10 +30,10 @@ namespace OGPPacManClient.Client.Chat.Order {
 
 
         public override void ReceiveMessage(WrappedMessage<M> message) {
-            lock (this){
+            lock (this) {
                 var msgId = (message.SenderId, message.messageId);
 
-                if (!seenMessages.Contains(msgId)){
+                if (!seenMessages.Contains(msgId)) {
                     CallReceivedMessage(message.Message);
                     seenMessages.Add(msgId);
                     new Thread(() => DoSendMessage(message)).Start();
@@ -43,16 +43,18 @@ namespace OGPPacManClient.Client.Chat.Order {
 
 
         private void DoSendMessage(WrappedMessage<M> wrappedMessage) {
-            OtherClients.AsParallel().ForAll(a => sendMessageToClient(a, wrappedMessage));
+            new Thread(() =>
+                OtherClients.AsParallel().ForAll(a => sendMessageToClient(a, wrappedMessage))
+            ).Start();
         }
 
         private void sendMessageToClient(
             KeyValuePair<int, ReliableBroadcast<M>> keyValue,
             WrappedMessage<M> wrappedMessage) {
-            try{
+            try {
                 keyValue.Value.ReceiveMessage(wrappedMessage);
             }
-            catch (SocketException){
+            catch (SocketException) {
                 Console.WriteLine($"Failed to send message to client: {keyValue.Key}");
             }
         }

@@ -15,7 +15,8 @@ namespace OGPPacManClient.Client.Chat {
         private readonly int SelfId;
 
         public ChatController(int selfId) {
-            messager = new ReliableBroadcast<ChatMessage>(selfId, EndpointName);
+            //messager = new ReliableBroadcast<ChatMessage>(selfId, EndpointName);
+            messager = new VectorClocks<ChatMessage>(selfId, EndpointName);
             messager.ReceivedMessage += ReceiveMessage;
             messager.Start();
 

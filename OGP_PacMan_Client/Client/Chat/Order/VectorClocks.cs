@@ -4,49 +4,52 @@ using System.Linq;
 using OGPPacManClient.Client.Chat.Order;
 
 namespace OGPPacManClient.Client.Chat {
+    [Serializable]
     internal class WrappedMessage<M> {
         public WrappedMessage(M message, int senderId, int messageId, (int, int)[] vectorClock) {
             Message = message;
             SenderId = senderId;
-            VectorClock = vectorClock;
+            IdsVectorClock = vectorClock.Select(a => a.Item1).ToArray();
+            ClocksVectorClock = vectorClock.Select(a => a.Item2).ToArray();
             this.messageId = messageId;
         }
 
-        public (int SenderId, int MsgId)[] VectorClock { get; }
+        public int[] IdsVectorClock { get; }
+        public int[] ClocksVectorClock { get; }
+
         public M Message { get; }
         public int SenderId { get; }
         public int messageId { get; }
+
+        public (int Id, int MsgId)[] VectorClock() {
+            var clock = new (int Id, int MessageId)[IdsVectorClock.Length];
+            for (var i = 0; i < IdsVectorClock.Length; i++) clock[i] = (IdsVectorClock[i], ClocksVectorClock[i]);
+            return clock;
+        }
     }
 
-    internal class VectorClocks<M> {
+    internal class VectorClocks<M> : IMessager<M> {
         private readonly ReliableBroadcast<WrappedMessage<M>> broadcast;
         private readonly IDictionary<int, int> clocksVector;
-        private readonly Func<M, int> getSenderIdFunc;
 
         private readonly IDictionary<(int SenderId, int MsgId), WrappedMessage<M>> messagesToDeliver;
         private readonly int selfId;
 
-        public VectorClocks(int selfId, Func<M, int> getSenderIdFunc, String endpointName) {
+        public VectorClocks(int selfId, string endpointName) {
             clocksVector = new Dictionary<int, int>();
             messagesToDeliver = new Dictionary<(int SenderId, int MsgId), WrappedMessage<M>>();
             broadcast = new ReliableBroadcast<WrappedMessage<M>>(selfId, endpointName);
-            this.getSenderIdFunc = getSenderIdFunc;
+            broadcast.ReceivedMessage += ReceiveMessage;
             this.selfId = selfId;
+            clocksVector[selfId] = 0;
         }
 
-        public event Action<M> MessageReady;
 
-
-        public void ReceiveMessage(WrappedMessage<M> message) {
-            lock (this){
-                messagesToDeliver.Add((message.SenderId, message.messageId), message);
-                DoDeliver();
-            }
-        }
+        public event Action<M> ReceivedMessage;
 
 
         public void SendMessage(M message) {
-            lock (this){
+            lock (this) {
                 clocksVector[selfId] += 1;
                 var wrap = new WrappedMessage<M>(message, selfId, clocksVector[selfId],
                     clocksVector.Select(a => (a.Key, a.Value)).ToArray());
@@ -54,14 +57,34 @@ namespace OGPPacManClient.Client.Chat {
             }
         }
 
+        public void AddClients(List<(int Id, string URL)> clients) {
+            lock (this) {
+                clients.ForEach(client => {
+                    if (!clocksVector.ContainsKey(client.Id)) clocksVector[client.Id] = 0;
+                });
+                broadcast.AddClients(clients);
+            }
+        }
+
+        public void Start() {
+            broadcast.Start();
+        }
+
+        public void ReceiveMessage(WrappedMessage<M> message) {
+            lock (this) {
+                messagesToDeliver.Add((message.SenderId, message.messageId), message);
+                DoDeliver();
+            }
+        }
+
 
         private void DoDeliver() {
             // C# does not like tail recursion :(
-            while (true){
+            while (true) {
                 IList<(int, int)> delivered = new List<(int, int)>();
                 foreach (var keyValuePair in messagesToDeliver)
-                    if (IsDeliverable(keyValuePair.Value)){
-                        MessageReady.Invoke(keyValuePair.Value.Message);
+                    if (IsDeliverable(keyValuePair.Value)) {
+                        ReceivedMessage.Invoke(keyValuePair.Value.Message);
                         delivered.Add(keyValuePair.Key);
                         clocksVector[keyValuePair.Key.SenderId] = keyValuePair.Key.MsgId;
                         break;
@@ -74,11 +97,11 @@ namespace OGPPacManClient.Client.Chat {
         }
 
         private bool IsDeliverable(WrappedMessage<M> message) {
-            return Array.TrueForAll(message.VectorClock,
+            return Array.TrueForAll(message.VectorClock(),
                 messageClock =>
-                    messageClock.SenderId == message.SenderId &&
-                    messageClock.MsgId - 1 <= clocksVector[messageClock.SenderId]
-                    || messageClock.MsgId <= clocksVector[messageClock.SenderId]);
+                    messageClock.Id == message.SenderId &&
+                    messageClock.MsgId - 1 == clocksVector[messageClock.Id]
+                    || messageClock.MsgId <= clocksVector[messageClock.Id]);
         }
     }
 }
