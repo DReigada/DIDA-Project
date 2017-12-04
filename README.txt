@@ -45,3 +45,4 @@ DONE - Server recieve in args the ip
 - Remove coins concurrent problem
 - Slave should try to kill master when it becomes the new master
 - Try to improve master timeout
+- Add roundID to server
