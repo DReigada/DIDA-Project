@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using ClientServerInterface.PacMan.Client;
+using ClientServerInterface.Client;
 using ClientServerInterface.PacMan.Client.Game;
 using ClientServerInterface.PacMan.Server;
 
 namespace OGP_PacMan_Server.Slave.PacMan {
     [Serializable]
     public class GameState {
-        public GameState(Board board, List<IPacManClient> pacManClients, List<Movement> newMovements) {
+        public GameState(Board board, List<ConnectedClient> clients, List<Movement> newMovements) {
             Board = board;
-            PacManClients = pacManClients;
+            Clients = clients;
             NewMovements = newMovements;
         }
 
         public Board Board { get; }
 
-        public List<IPacManClient> PacManClients { get; }
+        public List<ConnectedClient> Clients { get; }
 
         public List<Movement> NewMovements { get; }
     }

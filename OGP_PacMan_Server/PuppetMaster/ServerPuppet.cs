@@ -7,19 +7,12 @@ namespace OGP_PacMan_Server.PuppetMaster {
         private static readonly object obj = new object();
         private static bool cond;
 
-
-        public static void Wait() {
-            lock (obj){
-                while (cond) Monitor.Wait(obj);
-            }
-        }
-
         public void InjectDelay() {
             throw new NotImplementedException();
         }
 
         public void Unfreeze() {
-            lock (obj){
+            lock (obj) {
                 cond = false;
                 Monitor.PulseAll(cond);
             }
@@ -29,12 +22,13 @@ namespace OGP_PacMan_Server.PuppetMaster {
             Wait();
         }
 
+        //Crash and kill should be the same methods?
         public void Crash() {
-            throw new NotImplementedException();
+            Environment.Exit(1);
         }
 
         public void Freeze() {
-            lock (obj){
+            lock (obj) {
                 cond = true;
             }
         }
@@ -45,6 +39,13 @@ namespace OGP_PacMan_Server.PuppetMaster {
 
         public void LocalStatus() {
             throw new NotImplementedException();
+        }
+
+
+        public static void Wait() {
+            lock (obj) {
+                while (cond) Monitor.Wait(obj);
+            }
         }
 
         public void Kill() {
