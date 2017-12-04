@@ -8,8 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Drawing;
-
 namespace OGPPacManClient.Properties {
     using System;
     
@@ -65,29 +63,9 @@ namespace OGPPacManClient.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap cccc {
-            get {
-                object obj = ResourceManager.GetObject("cccc", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap coin {
             get {
                 object obj = ResourceManager.GetObject("coin", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap coint2 {
-            get {
-                object obj = ResourceManager.GetObject("coint2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -125,7 +103,7 @@ namespace OGPPacManClient.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static Bitmap red_guy {
+        internal static System.Drawing.Bitmap red_guy {
             get {
                 object obj = ResourceManager.GetObject("red_guy", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));

@@ -141,7 +141,7 @@ namespace OGPPacManClient.Interface {
         private PictureBox initCoin(Coin coin) {
             return new PictureBox {
                 BackColor = Color.Transparent,
-                Image = Resources.cccc,
+                Image = Resources.coin,
                 Margin = new Padding(0),
                 Name = $"coin{coin.Id}",
                 Size = new Size(22, 22),
