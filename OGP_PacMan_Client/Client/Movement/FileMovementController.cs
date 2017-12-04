@@ -16,10 +16,10 @@ namespace OGPPacManClient.Client.Movement {
         }
 
         public override ClientServerInterface.PacMan.Server.Movement.Direction GetDirection() {
-            if (linesQueue.Count != 0){
+            if (linesQueue.Count != 0) {
                 var line = linesQueue.Dequeue();
                 var parsedLine = ParseLine(line);
-                switch (parsedLine){
+                switch (parsedLine) {
                     case "UP":
                         return ClientServerInterface.PacMan.Server.Movement.Direction.Up;
                     case "DOWN":
@@ -33,6 +33,10 @@ namespace OGPPacManClient.Client.Movement {
                 }
             }
             return ClientServerInterface.PacMan.Server.Movement.Direction.Stopped;
+        }
+
+        public bool HasNext() {
+            return linesQueue.Count > 0;
         }
 
         private string ParseLine(string line) {

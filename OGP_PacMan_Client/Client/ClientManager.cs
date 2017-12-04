@@ -13,23 +13,25 @@ using OGPPacManClient.Interface;
 namespace OGPPacManClient.Client {
     internal class ClientManager {
         private readonly ClientImpl client;
+        private readonly string clientIP;
+        private readonly int clientPort;
         public readonly BoardController controller;
         private readonly Form1 form;
-        private readonly int port;
-        private readonly int serverPort;
+        private readonly string serverURL;
         private ChatController chatController;
         private AbstractMovementController moveController;
         private string movementFile;
         private IPacmanServer server;
 
-        public ClientManager(int port, int serverPort) {
-            this.port = port;
-            this.serverPort = serverPort;
+        public ClientManager(string clientIP, int clientPort, string serverURL) {
+            this.clientIP = clientIP;
+            this.clientPort = clientPort;
+            this.serverURL = serverURL;
 
             form = new Form1();
             controller = new BoardController(form);
 
-           
+
             client = new ClientImpl(controller, UpdateServer);
         }
 
@@ -40,7 +42,7 @@ namespace OGPPacManClient.Client {
             RegisterClientChannel();
             server = GetServerConnection();
 
-            var clientInfo = new ClientInfo($"tcp://localhost:{port}"); //TODO what is name?
+            var clientInfo = new ClientInfo($"tcp://{clientIP}:{clientPort}");
             var gameProps = server.RegisterClient(clientInfo);
             InitializeControllers(gameProps);
         }
@@ -52,7 +54,7 @@ namespace OGPPacManClient.Client {
         private void InitializeControllers(GameProps gameProps) {
             if (movementFile != null)
                 moveController =
-                    new FileMovementController(movementFile, server, gameProps.GameSpeed, gameProps.UserId);
+                    new MixedMovementController(movementFile, form, server, gameProps.GameSpeed, gameProps.UserId);
             else
                 moveController = new MovementController(form, server, gameProps.GameSpeed, gameProps.UserId);
 
@@ -66,7 +68,7 @@ namespace OGPPacManClient.Client {
         }
 
         private void RegisterTCPChannel() {
-            var channel = new TcpChannel(port);
+            var channel = new TcpChannel(clientPort);
             ChannelServices.RegisterChannel(channel, false);
         }
 
@@ -79,40 +81,14 @@ namespace OGPPacManClient.Client {
             return (IPacmanServer)
                 Activator.GetObject(
                     typeof(IPacmanServer),
-                    $"tcp://localhost:{serverPort}/PacManServer");
+                    $"tcp://{serverURL}/PacManServer");
         }
-        
 
-        private void UpdateServer(String url) {
+
+        private void UpdateServer(string url) {
             Console.WriteLine(url);
-            server = (IPacmanServer) Activator.GetObject( typeof(IPacmanServer), url + "/PacManServer");
+            server = (IPacmanServer) Activator.GetObject(typeof(IPacmanServer), url + "/PacManServer");
             moveController.setNewServer(server);
         }
-
-        // TODO: remove this, this is just for testing
-        /*  public void Test() {
-            Ghost[] g = {
-                new Ghost(GhostColor.Pink, new Position(25, 100), 1),
-                new Ghost(GhostColor.Yellow, new Position(100, 66), 2)
-            };
-            PacManPlayer[] p =
-                {new PacManPlayer(3, new Position(200, 299)), new PacManPlayer(4, new Position(150, 150))};
-
-            Coin[] c = {
-                new Coin(1, new Position(200, 200)), new Coin(2, new Position(50, 50)),
-                new Coin(3, new Position(100, 50))
-            };
-            var board = new Board(g.ToList(), p.ToList(), c.ToList());
-
-
-            void TestThread(object o) {
-                g[0].Position.X += 1;
-                p[0].Position.Y += 1;
-                controller.Update(board);
-            }
-
-
-            var timer = new Timer(TestThread, null, 100, 10);
-        }*/
     }
 }

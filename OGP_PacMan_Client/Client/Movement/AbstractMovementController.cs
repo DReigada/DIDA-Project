@@ -5,9 +5,9 @@ using ClientServerInterface.PacMan.Server;
 
 namespace OGPPacManClient.Client.Movement {
     public abstract class AbstractMovementController {
-        private IPacmanServer server;
         private readonly Timer timer;
         private readonly int userId;
+        private IPacmanServer server;
 
         protected AbstractMovementController(IPacmanServer server, int delta, int userId) {
             this.userId = userId;
@@ -22,15 +22,19 @@ namespace OGPPacManClient.Client.Movement {
             timer.Start();
         }
 
-        public void NotifyServer() {
-            try{
+        public void Stop() {
+            timer.Stop();
+        }
 
+        public void NotifyServer() {
+            try {
                 var dir = GetDirection();
                 if (dir != ClientServerInterface.PacMan.Server.Movement.Direction.Stopped) {
                     var mov = new ClientServerInterface.PacMan.Server.Movement(userId, dir);
                     server.SendAction(mov);
                 }
-            } catch(SocketException) {
+            }
+            catch (SocketException) {
                 Console.WriteLine("Server is dead");
             }
         }
