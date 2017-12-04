@@ -16,6 +16,7 @@ namespace OGPPacManClient.Interface {
         private readonly Dictionary<int, PictureBox> ghosts;
         private readonly Dictionary<int, PictureBox> players;
 
+        private readonly object updateLock = new object();
 
         public BoardController(Form1 form) {
             ghosts = new Dictionary<int, PictureBox>();
@@ -32,54 +33,52 @@ namespace OGPPacManClient.Interface {
 
 
         private void UpdatePositions(Board updatedBoard) {
-            UpdateProps(updatedBoard.Ghosts, ghosts, initGhost);
-            UpdateProps(updatedBoard.Players, players, initPlayer);
-            UpdateProps(updatedBoard.Coins, coins, initCoin);
-            RemoveCoins(updatedBoard.Coins);
+            lock (updateLock) {
+                UpdateProps(updatedBoard.Ghosts, ghosts, initGhost);
+                UpdateProps(updatedBoard.Players, players, initPlayer);
+                UpdateProps(updatedBoard.Coins, coins, initCoin);
+                RemoveCoins(updatedBoard.Coins);
+            }
         }
 
         private void RemoveCoins(List<Coin> coinsToKeep) {
-            lock (coins){
-                var keyValuesToKeep = coinsToKeep.Select(a => new KeyValuePair<int, PictureBox>(a.Id, coins[a.Id]));
-                var removedCoins = coins.Except(keyValuesToKeep).ToList();
-                removedCoins.ForEach(keyValue => {
-                    coins.Remove(keyValue.Key);
-                    form.Invoke((MethodInvoker) (() => form.Controls.Remove(keyValue.Value)));
-                });
-            }
+            var keyValuesToKeep = coinsToKeep.Select(a => new KeyValuePair<int, PictureBox>(a.Id, coins[a.Id]));
+            var removedCoins = coins.Except(keyValuesToKeep).ToList();
+            removedCoins.ForEach(keyValue => {
+                coins.Remove(keyValue.Key);
+                form.Invoke((MethodInvoker) (() => form.Controls.Remove(keyValue.Value)));
+            });
         }
 
 
         private void UpdateProps<A>(List<A> props, Dictionary<int, PictureBox> dict, Func<A, PictureBox> initProp)
             where A : AbstractProp {
-            lock (props){
-                props.ForEach(prop => {
-                    form.Invoke((MethodInvoker) (
-                        () => {
-                            if (dict.TryGetValue(prop.Id, out var maybeProp)){
-                                maybeProp.Left = prop.Position.X;
-                                maybeProp.Top = prop.Position.Y;
-                            }
-                            else{
-                                var pic = initProp(prop);
-                                dict.Add(prop.Id, pic);
-                                form.Controls.Add(pic);
-                            }
-
-                            switch (prop){
-                                case PacManPlayer player:
-                                    var pic = dict[player.Id];
-                                    pic.Image = GetNewImage(player.Direction, pic);
-                                    break;
-                            }
+            props.ForEach(prop => {
+                form.Invoke((MethodInvoker) (
+                    () => {
+                        if (dict.TryGetValue(prop.Id, out var maybeProp)) {
+                            maybeProp.Left = prop.Position.X;
+                            maybeProp.Top = prop.Position.Y;
                         }
-                    ));
-                });
-            }
+                        else {
+                            var pic = initProp(prop);
+                            dict.Add(prop.Id, pic);
+                            form.Controls.Add(pic);
+                        }
+
+                        switch (prop) {
+                            case PacManPlayer player:
+                                var pic = dict[player.Id];
+                                pic.Image = GetNewImage(player.Direction, pic);
+                                break;
+                        }
+                    }
+                ));
+            });
         }
 
         private Image GetNewImage(Movement.Direction dir, PictureBox pic) {
-            switch (dir){
+            switch (dir) {
                 case Movement.Direction.Down:
                     return Resources.Down;
                 case Movement.Direction.Left:
@@ -95,7 +94,7 @@ namespace OGPPacManClient.Interface {
 
         private PictureBox initGhost(Ghost ghost) {
             Bitmap GhostImage() {
-                switch (ghost.Color){
+                switch (ghost.Color) {
                     case GhostColor.Pink:
                         return Resources.pink_guy;
                     case GhostColor.Red:

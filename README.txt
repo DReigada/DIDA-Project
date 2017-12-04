@@ -42,7 +42,7 @@ DONE - Input file for client from args
 DONE - Input file accepting keys after reading input file
 DONE - Server recieve in args the ip
 DONE - Client recieve in args the ip
-- Remove coins concurrent problem
+DONE - Remove coins concurrent problem
 - Slave should try to kill master when it becomes the new master
 - Try to improve master timeout
 - Add roundID to server
