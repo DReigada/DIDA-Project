@@ -39,7 +39,7 @@ FIX:
 ---
 DONE - Concurrent server problems (server add new client)
 DONE - Input file for client from args
-- Input file accepting keys after reading input file
+DONE - Input file accepting keys after reading input file
 DONE - Server recieve in args the ip
 DONE - Client recieve in args the ip
 - Remove coins concurrent problem

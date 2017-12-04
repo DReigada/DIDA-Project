@@ -27,7 +27,7 @@ namespace pacman {
             var clientManager = new ClientManager(clientIP, clientPort, serverURL);
 
             if (args.Length > 3)
-                clientManager.UseMovementFile(args[4]);
+                clientManager.UseMovementFile(args[3]);
 
             clientManager.Start();
         }

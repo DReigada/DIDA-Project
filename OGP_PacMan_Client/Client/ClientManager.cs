@@ -54,7 +54,7 @@ namespace OGPPacManClient.Client {
         private void InitializeControllers(GameProps gameProps) {
             if (movementFile != null)
                 moveController =
-                    new FileMovementController(movementFile, server, gameProps.GameSpeed, gameProps.UserId);
+                    new MixedMovementController(movementFile, form, server, gameProps.GameSpeed, gameProps.UserId);
             else
                 moveController = new MovementController(form, server, gameProps.GameSpeed, gameProps.UserId);
 
