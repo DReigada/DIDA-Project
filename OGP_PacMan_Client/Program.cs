@@ -11,12 +11,24 @@ namespace pacman {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var port = new Random().Next(16000, 16210);
-            Console.WriteLine($"Using port: {port}");
-            var clientManager = new ClientManager(port, 8086);
-            if (args.Length > 0){
-                clientManager.UseMovementFile(args[0]);
+
+            if (args.Length < 3) {
+                Console.WriteLine("Invalid number of arguments");
+                Environment.Exit(1);
             }
+
+            var clientIP = args[0];
+            var clientPort = int.Parse(args[1]);
+            var serverURL = args[2];
+
+
+            Console.WriteLine($"Starting client on: {clientIP}:{clientPort} with server: {serverURL}");
+
+            var clientManager = new ClientManager(clientIP, clientPort, serverURL);
+
+            if (args.Length > 3)
+                clientManager.UseMovementFile(args[4]);
+
             clientManager.Start();
         }
     }

@@ -38,10 +38,10 @@ DONE - Causal order on the clients' chat with vector clocks - Daniel
 FIX:
 ---
 DONE - Concurrent server problems (server add new client)
-- Input file for client from args
+DONE - Input file for client from args
 - Input file accepting keys after reading input file
 DONE - Server recieve in args the ip
-- Client recieve in args the ip
+DONE - Client recieve in args the ip
 - Remove coins concurrent problem
 - Slave should try to kill master when it becomes the new master
 - Try to improve master timeout
