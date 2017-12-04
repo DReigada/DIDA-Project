@@ -63,6 +63,7 @@
     <Compile Include="Client\ClientManager.cs" />
     <Compile Include="Client\Movement\AbstractMovementController.cs" />
     <Compile Include="Client\Movement\FileMovementController.cs" />
+    <Compile Include="Client\Movement\MixedMovementController.cs" />
     <Compile Include="Client\Movement\MovementController.cs" />
     <Compile Include="Interface\BoardController.cs" />
     <Compile Include="Interface\Form1.cs">
@@ -105,9 +106,6 @@
     <None Include="Resources\cccc.gif" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\coin.gif" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\coint2.gif" />
   </ItemGroup>
   <ItemGroup>
@@ -140,6 +138,12 @@
       <Project>{d8db8b38-c883-47f5-be5d-1b3bdd349ecb}</Project>
       <Name>OGPServices</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\coin.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\coin.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
