@@ -26,20 +26,22 @@ Missing Features
 ----------------
 DONE - Causal order on the clients' chat with vector clocks - Daniel
 - Fault tolerance:
-    -Passive Replication server-side - Diogo
-    -Server-side support clients death - Diogo
-    DONE -Causal order vector clock handle fault tolerance - Daniel/(help will be needed)
+    DONE/NEEDS FIX - Passive Replication server-side - Diogo
+    DONE - Server-side support clients death - Diogo
+    DONE - Causal order vector clock handle fault tolerance - Daniel/(help will be needed)
 - Connecting the Puppet Master to the client and server - Diogo/Daniel
 - Finish implementing Puppet Master and PCS - Pedro
 - Finish implementing ClientPuppet - Daniel
 - Finish implementing ServerPuppet - Diogo
 
-DeadLine: 30 November
 
 FIX:
 ---
--Concurrent server problems (server add new client)
--Input file for client from args
--Input file accepting keys after reading input file
--Server recieve in args the ip
--Client recieve in args the ip
+DONE - Concurrent server problems (server add new client)
+- Input file for client from args
+- Input file accepting keys after reading input file
+DONE - Server recieve in args the ip
+- Client recieve in args the ip
+- Remove coins concurrent problem
+- Slave should try to kill master when it becomes the new master
+- Try to improve master timeout

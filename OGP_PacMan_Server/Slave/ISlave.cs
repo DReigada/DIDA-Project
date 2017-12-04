@@ -1,7 +1,7 @@
 ﻿using System;
 using ClientServerInterface.Server;
 
-namespace OGP_PacMan_Server.ISlave {
+namespace OGP_PacMan_Server.Slave {
     public interface ISlave<TAction, TGameState> {
         void UpdatSlaveClient(ClientInfo clientInfo);
 
