@@ -1,9 +1,11 @@
-﻿using System.Timers;
+﻿using System;
+using System.Net.Sockets;
+using System.Timers;
 using ClientServerInterface.PacMan.Server;
 
 namespace OGPPacManClient.Client.Movement {
     public abstract class AbstractMovementController {
-        private readonly IPacmanServer server;
+        private IPacmanServer server;
         private readonly Timer timer;
         private readonly int userId;
 
@@ -21,11 +23,20 @@ namespace OGPPacManClient.Client.Movement {
         }
 
         public void NotifyServer() {
-            var dir = GetDirection();
-            if (dir != ClientServerInterface.PacMan.Server.Movement.Direction.Stopped){
-                var mov = new ClientServerInterface.PacMan.Server.Movement(userId, dir);
-                server.SendAction(mov);
+            try{
+
+                var dir = GetDirection();
+                if (dir != ClientServerInterface.PacMan.Server.Movement.Direction.Stopped) {
+                    var mov = new ClientServerInterface.PacMan.Server.Movement(userId, dir);
+                    server.SendAction(mov);
+                }
+            } catch(SocketException) {
+                Console.WriteLine("Server is dead");
             }
+        }
+
+        public void setNewServer(IPacmanServer server) {
+            this.server = server;
         }
     }
 }

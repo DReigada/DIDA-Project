@@ -11,14 +11,12 @@ namespace OGPPacManClient.Client {
     internal class ClientImpl : MarshalByRefObject, IPacManClient {
         private readonly BoardController controller;
 
-        public delegate void ChangeServerDel(string url);
+        private Action<string> updateServer;
 
-        public ChangeServerDel handler;
-
-        public ClientImpl(BoardController controller, ChangeServerDel hanlder) {
+        public ClientImpl(BoardController controller, Action<string> updateServer) {
             this.controller = controller;
             ConnectedClients = new List<ConnectedClient>();
-            this.handler = hanlder;
+            this.updateServer = updateServer;
         }
 
         public List<ConnectedClient> ConnectedClients { get; private set; }
@@ -38,7 +36,7 @@ namespace OGPPacManClient.Client {
         }
 
         public void UpdateServer(ServerInfo serverInfo) {
-            handler(serverInfo.Url);
+            updateServer(serverInfo.Url);
         }
 
         public event Action<List<ConnectedClient>> NewConnectedClients;
