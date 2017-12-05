@@ -15,7 +15,7 @@ namespace OGPPacManClient.Interface {
 
 
         private void KeyIsDown(object sender, KeyEventArgs e) {
-            switch (e.KeyCode){
+            switch (e.KeyCode) {
                 case Keys.Left:
                     Direction = Movement.Direction.Left;
                     break;
@@ -37,7 +37,7 @@ namespace OGPPacManClient.Interface {
         }
 
         private void KeyIsUp(object sender, KeyEventArgs e) {
-            switch (e.KeyCode){
+            switch (e.KeyCode) {
                 case Keys.Left:
                 case Keys.Right:
                 case Keys.Up:
@@ -48,7 +48,7 @@ namespace OGPPacManClient.Interface {
         }
 
         private void tbMsg_KeyDown(object sender, KeyEventArgs e) {
-            if (e.KeyCode == Keys.Enter && NewMessage != null){
+            if (e.KeyCode == Keys.Enter && NewMessage != null) {
                 var text = tbMsg.Text;
                 NewMessage.Invoke(text);
                 tbMsg.Clear();
@@ -60,6 +60,12 @@ namespace OGPPacManClient.Interface {
         public void AddMessage(string msg) {
             Invoke((MethodInvoker) (() =>
                 tbChat.Text += "\r\n" + msg));
+        }
+
+        public void UpdateScore(int score) {
+            Invoke((MethodInvoker) (() =>
+                ScoreLabel.Text = $"Score: {score}"
+            ));
         }
     }
 }

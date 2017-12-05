@@ -15,16 +15,19 @@ namespace OGPPacManClient.Interface {
 
         private readonly Dictionary<int, PictureBox> ghosts;
         private readonly Dictionary<int, PictureBox> players;
-
         private readonly object updateLock = new object();
+        private int currentScore;
 
         public BoardController(Form1 form) {
             ghosts = new Dictionary<int, PictureBox>();
             players = new Dictionary<int, PictureBox>();
             coins = new Dictionary<int, PictureBox>();
 
+            currentScore = 0;
             this.form = form;
         }
+
+        public int SelfId { get; set; }
 
         public void Update(Board board) {
             Task.Run(() =>
@@ -38,6 +41,15 @@ namespace OGPPacManClient.Interface {
                 UpdateProps(updatedBoard.Players, players, initPlayer);
                 UpdateProps(updatedBoard.Coins, coins, initCoin);
                 RemoveCoins(updatedBoard.Coins);
+                UpdateScore(updatedBoard.Players);
+            }
+        }
+
+        private void UpdateScore(List<PacManPlayer> players) {
+            var player = players.Find(a => a.Id == SelfId);
+            if (player.Score != currentScore) {
+                currentScore = player.Score;
+                form.UpdateScore(player.Score);
             }
         }
 
