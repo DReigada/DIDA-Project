@@ -70,7 +70,7 @@ namespace OGPPacManClient.Interface {
 
         public void ShowGameOver() {
             Invoke((MethodInvoker) (() => {
-                GameOverLabel.Text = "Game Over";
+                GameOverLabel.Text = "You deaded";
                 GameOverLabel.Show();
             }));
         }
