@@ -17,6 +17,8 @@ namespace OGPPacManClient.Interface {
         private readonly Dictionary<int, PictureBox> players;
         private readonly object updateLock = new object();
         private int currentScore;
+        private bool isAlive;
+
 
         public BoardController(Form1 form) {
             ghosts = new Dictionary<int, PictureBox>();
@@ -24,6 +26,7 @@ namespace OGPPacManClient.Interface {
             coins = new Dictionary<int, PictureBox>();
 
             currentScore = 0;
+            isAlive = true;
             this.form = form;
         }
 
@@ -41,15 +44,19 @@ namespace OGPPacManClient.Interface {
                 UpdateProps(updatedBoard.Players, players, initPlayer);
                 UpdateProps(updatedBoard.Coins, coins, initCoin);
                 RemoveCoins(updatedBoard.Coins);
-                UpdateScore(updatedBoard.Players);
+                UpdateGameInfo(updatedBoard.Players);
             }
         }
 
-        private void UpdateScore(List<PacManPlayer> players) {
+        private void UpdateGameInfo(List<PacManPlayer> players) {
             var player = players.Find(a => a.Id == SelfId);
             if (player.Score != currentScore) {
                 currentScore = player.Score;
                 form.UpdateScore(player.Score);
+            }
+            if (isAlive && !player.Alive) {
+                isAlive = false;
+                form.ShowGameOver();
             }
         }
 

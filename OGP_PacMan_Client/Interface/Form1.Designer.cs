@@ -25,7 +25,7 @@
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             this.ScoreLabel = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.GameOverLabel = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
@@ -49,16 +49,15 @@
             this.ScoreLabel.Size = new System.Drawing.Size(0, 32);
             this.ScoreLabel.TabIndex = 71;
             // 
-            // label2
+            // GameOverLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(326, -2);
-            this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(158, 55);
-            this.label2.TabIndex = 72;
-            this.label2.Text = "label2";
+            this.GameOverLabel.AutoSize = true;
+            this.GameOverLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GameOverLabel.Location = new System.Drawing.Point(326, -2);
+            this.GameOverLabel.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.GameOverLabel.Name = "GameOverLabel";
+            this.GameOverLabel.Size = new System.Drawing.Size(0, 55);
+            this.GameOverLabel.TabIndex = 72;
             // 
             // timer1
             // 
@@ -136,7 +135,7 @@
             this.ClientSize = new System.Drawing.Size(878, 635);
             this.Controls.Add(this.tbChat);
             this.Controls.Add(this.tbMsg);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.GameOverLabel);
             this.Controls.Add(this.ScoreLabel);
             this.Controls.Add(this.pictureBox4);
             this.Controls.Add(this.pictureBox3);
@@ -163,7 +162,7 @@
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox4;
         private System.Windows.Forms.Label ScoreLabel;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label GameOverLabel;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.TextBox tbMsg;
         private System.Windows.Forms.TextBox tbChat;

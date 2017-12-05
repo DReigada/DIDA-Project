@@ -7,7 +7,7 @@ namespace OGPPacManClient.Interface {
         public Form1() {
             Direction = Movement.Direction.Stopped;
             InitializeComponent();
-            label2.Visible = false;
+            GameOverLabel.Visible = false;
         }
 
         public Movement.Direction Direction { get; private set; }
@@ -66,6 +66,13 @@ namespace OGPPacManClient.Interface {
             Invoke((MethodInvoker) (() =>
                 ScoreLabel.Text = $"Score: {score}"
             ));
+        }
+
+        public void ShowGameOver() {
+            Invoke((MethodInvoker) (() => {
+                GameOverLabel.Text = "Game Over";
+                GameOverLabel.Show();
+            }));
         }
     }
 }
