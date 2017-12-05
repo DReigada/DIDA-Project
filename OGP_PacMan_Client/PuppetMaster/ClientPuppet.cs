@@ -13,7 +13,7 @@ namespace OGPPacManClient.PuppetMaster {
             }
         }
 
-        public void InjectDelay() {
+        public void InjectDelay(string pid_dest) {
             throw new NotImplementedException();
         }
 
@@ -38,7 +38,7 @@ namespace OGPPacManClient.PuppetMaster {
             throw new NotImplementedException();
         }
 
-        public void LocalStatus() {
+        public void LocalStatus(int round_id) {
             throw new NotImplementedException();
         }
 

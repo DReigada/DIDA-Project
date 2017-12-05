@@ -7,7 +7,11 @@ namespace OGP_PacMan_Server.PuppetMaster {
         private static readonly object obj = new object();
         private static bool cond;
 
-        public void InjectDelay() {
+        public void LocalStatus(int round_id) {
+            throw new NotImplementedException();
+        }
+
+        public void InjectDelay(string pid_dest) {
             throw new NotImplementedException();
         }
 
@@ -36,11 +40,6 @@ namespace OGP_PacMan_Server.PuppetMaster {
         public void GlobalStatus() {
             throw new NotImplementedException();
         }
-
-        public void LocalStatus() {
-            throw new NotImplementedException();
-        }
-
 
         public static void Wait() {
             lock (obj) {

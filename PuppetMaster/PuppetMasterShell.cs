@@ -14,21 +14,20 @@ using System.Runtime.Serialization.Formatters;
 using System.Runtime.Remoting;
 
 namespace PuppetMaster {
-    class PuppetMasterShell : MarshalByRefObject, IPuppetMaster {
+    class PuppetMasterShell{
 
         private TextReader stdin { get; set; }
         public bool readingFile { get; set; }
 
-        public static readonly string PCS_URL = "tcp://localhost:11000/ProcessCreationService";
+        public static readonly string PCS_URL = "tcp://localhost:11000/PCS";
 
         private string prompt = "[PuppetMaster] >>> ";
-        public Dictionary<string, List<IProcesses>> servers = new Dictionary<string, List<IProcesses>>();
-        public Dictionary<string, List<IProcesses>> clients = new Dictionary<string, List<IProcesses>>();
-        public Dictionary<string, List<IProcesses>> processes = new Dictionary<string, List<IProcesses>>();
+        //public Dictionary<string, List<IProcesses>> servers = new Dictionary<string, List<IProcesses>>();
+        //public Dictionary<string, List<IProcesses>> clients = new Dictionary<string, List<IProcesses>>();
+        public Dictionary<string, IProcesses> processes = new Dictionary<string, IProcesses>();
 
-        Dictionary<string, IProcessCreationService> pcs_list = new Dictionary<string, IProcessCreationService>();
-
-        private Dictionary<string, TcpChannel> channelList = new Dictionary<string, TcpChannel>();
+        //Dictionary<string, IProcessCreationService> pcs_list = new Dictionary<string, IProcessCreationService>();
+        //private Dictionary<string, TcpChannel> channelList = new Dictionary<string, TcpChannel>();
 
         public IProcessCreationService pcs = null;
 
@@ -38,15 +37,6 @@ namespace PuppetMaster {
 
         public PuppetMasterShell() {
             commands = new List<Command>();
-            
-            BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
-            provider.TypeFilterLevel = TypeFilterLevel.Full;
-            IDictionary props = new Hashtable();
-            props["port"] = 11001;
-            ChannelServices.RegisterChannel(new TcpChannel(props, null, provider), false);
-            RemotingServices.Marshal(this, "PuppetMaster", typeof(IPuppetMaster));
-
-
             commands.Add(new Crash(this));
             commands.Add(new Freeze(this));
             commands.Add(new GlobalStatus(this));
@@ -59,21 +49,18 @@ namespace PuppetMaster {
             commands.Add(new Wait(this));
             commands.Add(new Exit(this));
             
-            IProcessCreationService pcs = connectPCS();
             parseConfigFile();
 
         }
-
-        public IProcessCreationService connectPCS(){
+        public IProcessCreationService connectPCS(string url){
             try{
-                pcs = (IProcessCreationService)Activator.GetObject(typeof(IProcessCreationService), PCS_URL);
+                pcs = (IProcessCreationService)Activator.GetObject(typeof(IProcessCreationService), url);
             }
             catch (Exception) {
                 Console.WriteLine("Couldn't reach IProcessCreationService.");
             }
             return pcs;
         }
-
 
         public Command getCommand(string input){
             foreach (Command cmd in commands) {
@@ -135,7 +122,7 @@ namespace PuppetMaster {
             Console.Write("[CONFIGURATION] Y/N: ");
             string input = Console.ReadLine();
             bool step_by_step = false;
-            if (string.Equals("y", input, StringComparison.OrdinalIgnoreCase))
+            if (string.Equals("y", input, StringComparison.OrdinalIgnoreCase) || string.Equals("yes", input, StringComparison.OrdinalIgnoreCase))
                 step_by_step = true;
             string inputLine;
 
@@ -144,18 +131,16 @@ namespace PuppetMaster {
                 string[] args = inputLine.Split(' ');
                 string command = args[0];
 
-                Console.Write("{0} \"{1}\"", prompt, inputLine);
-                if (step_by_step)
+                if (step_by_step){
+                    Console.Write("{0} \"{1}\"", prompt, inputLine);
                     Console.ReadLine();
-
+                }
+                else{
+                    Console.WriteLine("{0} \"{1}\"", prompt, inputLine);
+                }
                 doCommand(inputLine);
             }
             Console.WriteLine("[CONFIGURATION] Sucessfully read main config file!");
-        }
-
-        public void sendMsgToPM(string msg)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -20,25 +20,8 @@ namespace PuppetMaster
         public static readonly string CONFIG_FILE_NAME = @"dad-ogp.config";
 
         static void Main(string[] args) {
-            /*channel = new TcpChannel(Port);
-            ChannelServices.RegisterChannel(channel, false);
-            RemotingConfiguration.RegisterWellKnownServiceType(
-                 typeof(PuppetMasterService),
-                 Name,
-                 WellKnownObjectMode.Singleton);*/
-
-            //System.Console.WriteLine("[INIT] PuppetMaster Service is running.");
-            //System.Console.WriteLine("[INIT] Press <enter> to exit...");
-            // System.Console.ReadLine();
-
             PuppetMasterShell shell = new PuppetMasterShell();
             shell.start();
-        }
-    }
-
-    public  class PuppetMasterService : MarshalByRefObject, IPuppetMaster {
-        public void sendMsgToPM(string msg) {
-            throw new NotImplementedException();
         }
     }
 }

@@ -12,9 +12,18 @@ namespace PuppetMaster.commands {
         }
 
         public override void Execute(string[] args) {
-            /*foreach (IProcesses iprocess in shell.getAllOperators()) {
-                new Thread(() => iprocess.GlobalStatus()).Start();
-            }*/
+            if (args.Length != 0){
+                printErrorMsg();
+                return;
+            }
+            foreach (KeyValuePair<string, IProcesses> entry in shell.processes)  {
+                try{
+                    //call globalstatus                    
+                }
+                catch (Exception e){
+                    Console.WriteLine("[GlobalStatus] ERROR: {0}.", e.Message);
+                }
+            }
         }
     }
 }

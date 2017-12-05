@@ -16,11 +16,10 @@ namespace ProcessCreationService {
     class Program {
 
         public static readonly int PCS_PORT = 11000;
-        public static readonly string PCS_NAME = "ProcessCreationService";
-        public static readonly int PM_PORT = 11001;
-        public static readonly string PM_NAME = "PuppetMaster";
+        public static readonly string PCS_NAME = "PCS";
 
-        static void Main(string[] args) {
+        static void Main(string[] args) { 
+
             BinaryServerFormatterSinkProvider provider = new BinaryServerFormatterSinkProvider();
             provider.TypeFilterLevel = TypeFilterLevel.Full;
             IDictionary props = new Hashtable();
@@ -30,6 +29,8 @@ namespace ProcessCreationService {
 
             ProcessCreationService pcs = new ProcessCreationService();
             RemotingServices.Marshal(pcs, PCS_NAME, typeof(ProcessCreationService));
+
+
             Console.WriteLine("Process Creation Service is running.\nPress <enter> to exit...");
             Console.ReadLine();
         }
