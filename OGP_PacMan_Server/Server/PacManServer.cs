@@ -32,13 +32,13 @@ namespace OGP_PacMan_Server.Server {
 
         private readonly Timer proofTimer;
 
-        private readonly List<IPacManSlave> slaves;
+        private IPacManSlave slave;
+
+        private readonly string url;
 
         private bool isMaster;
 
         private TimeSpan LastProof;
-
-        private readonly string url;
 
         public PacManServer(int gameSpeed, int numberPlayers) {
             this.gameSpeed = gameSpeed;
@@ -58,7 +58,6 @@ namespace OGP_PacMan_Server.Server {
             this.isMaster = isMaster;
             this.url = url;
             clients = new List<ConnectedClient>();
-            slaves = new List<IPacManSlave>();
             pacManClients = new List<IPacManClient>();
             game = new PacManGame(numberPlayers);
 
@@ -77,7 +76,6 @@ namespace OGP_PacMan_Server.Server {
             this.isMaster = isMaster;
             this.url = url;
             clients = new List<ConnectedClient>();
-            slaves = new List<IPacManSlave>();
             pacManClients = new List<IPacManClient>();
             game = new PacManGame(numberPlayers);
             master = (IPacManSlave) Activator.GetObject(typeof(IPacManSlave), masterUrl + "/PacManServer");
@@ -93,19 +91,15 @@ namespace OGP_PacMan_Server.Server {
             if (!isMaster) {
                 var state = master.GetGameState(new SlaveInfo(url));
                 if (state.Board != null) game.State = state.Board;
-                foreach (var client in state.Clients) {
-                    RegisterClient(new ClientInfo(client.Url));
-                }
-                foreach (var movement in state.NewMovements) {
-                    game.AddMovements(movement);
-                }
+                foreach (var client in state.Clients) RegisterClient(new ClientInfo(client.Url));
+                foreach (var movement in state.NewMovements) game.AddMovements(movement);
             }
         }
 
         public GameProps RegisterClient(ClientInfo client) {
             ServerPuppet.Wait();
             lock (pacManClients) {
-                foreach (var slave in slaves) {
+                if(slave != null) { 
                     Console.WriteLine("here");
                     slave.RegisterClient(client);
                 }
@@ -135,8 +129,10 @@ namespace OGP_PacMan_Server.Server {
 
         public void SendAction(Movement movement) {
             ServerPuppet.Wait();
-            foreach (var slave in slaves) slave.SendAction(movement);
             game.AddMovements(movement);
+            if (slave != null) {
+                slave.SendAction(movement);
+            }
         }
 
         //will probably remove this
@@ -150,8 +146,7 @@ namespace OGP_PacMan_Server.Server {
         public GameState GetGameState(SlaveInfo slaveInfo) {
             ServerPuppet.Wait();
             var gameState = new GameState(game.State, clients, game.NewMovements);
-            var slave = (IPacManSlave) Activator.GetObject(typeof(IPacManSlave), slaveInfo.Url + "/PacManServer");
-            slaves.Add(slave);
+            slave = (IPacManSlave) Activator.GetObject(typeof(IPacManSlave), slaveInfo.Url + "/PacManServer");
             if (proofTimer.Enabled == false) proofTimer.Enabled = true;
             return gameState;
         }
@@ -166,16 +161,23 @@ namespace OGP_PacMan_Server.Server {
             ServerPuppet.Wait();
             if (isMaster) {
                 var time = DateTime.Now.TimeOfDay;
-                foreach (var slave in slaves) //Console.WriteLine(time);
-                    slave.IAmAlive(time);
+                if (slave != null) //Console.WriteLine(time);
+                    try {
+                        slave.IAmAlive(time);
+                    }
+                    catch (SocketException) {
+                        slave = null;
+                        proofTimer.Enabled = false;
+                    }
             }
             else {
                 Console.WriteLine(DateTime.Now.TimeOfDay.Subtract(LastProof));
                 var diff = DateTime.Now.TimeOfDay.Subtract(LastProof);
                 //Console.WriteLine(diff.TotalMilliseconds);
-                if (diff.TotalMilliseconds > gameSpeed) {
+                if (diff.TotalMilliseconds > gameSpeed * 5) {
                     isMaster = true;
                     Console.WriteLine(clients.Count);
+                    master.Kill();
                     foreach (var client in pacManClients) {
                         Console.WriteLine(url);
                         client.UpdateServer(new ServerInfo(url));
@@ -219,6 +221,10 @@ namespace OGP_PacMan_Server.Server {
             lock (pacManClients) {
                 foreach (var pacManClient in pacManClients) pacManClient.UpdateConnectedClients(clients);
             }
+        }
+
+        public void Kill() {
+            Environment.Exit(1);
         }
     }
 }

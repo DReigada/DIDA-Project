@@ -10,5 +10,7 @@ namespace OGP_PacMan_Server.Slave {
         TGameState GetGameState(SlaveInfo slaveInfo);
 
         void IAmAlive(TimeSpan time);
+
+        void Kill();
     }
 }
