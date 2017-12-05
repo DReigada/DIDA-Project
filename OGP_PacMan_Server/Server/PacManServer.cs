@@ -32,13 +32,13 @@ namespace OGP_PacMan_Server.Server {
 
         private readonly Timer proofTimer;
 
-        private IPacManSlave slave;
-
         private readonly string url;
 
         private bool isMaster;
 
         private TimeSpan LastProof;
+
+        private IPacManSlave slave;
 
         public PacManServer(int gameSpeed, int numberPlayers) {
             this.gameSpeed = gameSpeed;
@@ -99,7 +99,7 @@ namespace OGP_PacMan_Server.Server {
         public GameProps RegisterClient(ClientInfo client) {
             ServerPuppet.Wait();
             lock (pacManClients) {
-                if(slave != null) { 
+                if (slave != null) {
                     Console.WriteLine("here");
                     slave.RegisterClient(client);
                 }
@@ -130,9 +130,7 @@ namespace OGP_PacMan_Server.Server {
         public void SendAction(Movement movement) {
             ServerPuppet.Wait();
             game.AddMovements(movement);
-            if (slave != null) {
-                slave.SendAction(movement);
-            }
+            if (slave != null) slave.SendAction(movement);
         }
 
         //will probably remove this
@@ -157,6 +155,10 @@ namespace OGP_PacMan_Server.Server {
             if (proofTimer.Enabled == false) proofTimer.Enabled = true;
         }
 
+        public void Kill() {
+            Environment.Exit(1);
+        }
+
         public void LifeProof() {
             ServerPuppet.Wait();
             if (isMaster) {
@@ -177,7 +179,7 @@ namespace OGP_PacMan_Server.Server {
                 if (diff.TotalMilliseconds > gameSpeed * 5) {
                     isMaster = true;
                     Console.WriteLine(clients.Count);
-                    master.Kill();
+                    TryToKillMaster();
                     foreach (var client in pacManClients) {
                         Console.WriteLine(url);
                         client.UpdateServer(new ServerInfo(url));
@@ -223,8 +225,14 @@ namespace OGP_PacMan_Server.Server {
             }
         }
 
-        public void Kill() {
-            Environment.Exit(1);
+        private void TryToKillMaster() {
+            new Thread(() => {
+                try {
+                    master.Kill();
+                }
+                catch (SocketException) {
+                }
+            }).Start();
         }
     }
 }

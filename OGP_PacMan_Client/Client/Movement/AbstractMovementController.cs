@@ -40,6 +40,7 @@ namespace OGPPacManClient.Client.Movement {
         }
 
         public void setNewServer(IPacmanServer server) {
+            Console.WriteLine("NEW SERVER");
             this.server = server;
         }
     }
