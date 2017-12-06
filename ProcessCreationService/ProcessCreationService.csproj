@@ -51,9 +51,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OGPServices\OGPServices.csproj">
-      <Project>{d8db8b38-c883-47f5-be5d-1b3bdd349ecb}</Project>
-      <Name>OGPServices</Name>
+    <ProjectReference Include="..\OGPPuppetServices\OGPPuppetServices.csproj">
+      <Project>{9dc74342-c35f-4a92-86fe-91d84de8dd4e}</Project>
+      <Name>OGPPuppetServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\OGP_PacMan_Server\OGP_PacMan_Server.csproj">
       <Project>{8546596E-F20B-4EBB-8A53-72C2F660329E}</Project>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientServerInterface", "Client_Server_Interface\ClientServerInterface.csproj", "{2E2EC792-C84B-4DF0-BFA7-F4B94C52D42B}"
 EndProject
@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PuppetMaster", "PuppetMaste
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessCreationService", "ProcessCreationService\ProcessCreationService.csproj", "{ECCD6F9D-F64C-4E0E-9F4F-88BFCEF9B692}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OGPServices", "OGPServices\OGPServices.csproj", "{D8DB8B38-C883-47F5-BE5D-1B3BDD349ECB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OGPPuppetServices", "OGPPuppetServices\OGPPuppetServices.csproj", "{9DC74342-C35F-4A92-86FE-91D84DE8DD4E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,10 @@ Global
 		{ECCD6F9D-F64C-4E0E-9F4F-88BFCEF9B692}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECCD6F9D-F64C-4E0E-9F4F-88BFCEF9B692}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECCD6F9D-F64C-4E0E-9F4F-88BFCEF9B692}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D8DB8B38-C883-47F5-BE5D-1B3BDD349ECB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8DB8B38-C883-47F5-BE5D-1B3BDD349ECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D8DB8B38-C883-47F5-BE5D-1B3BDD349ECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D8DB8B38-C883-47F5-BE5D-1B3BDD349ECB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DC74342-C35F-4A92-86FE-91D84DE8DD4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DC74342-C35F-4A92-86FE-91D84DE8DD4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DC74342-C35F-4A92-86FE-91D84DE8DD4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DC74342-C35F-4A92-86FE-91D84DE8DD4E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
