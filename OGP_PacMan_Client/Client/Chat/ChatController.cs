@@ -5,8 +5,6 @@ using System.Threading;
 using ClientServerInterface.Client;
 using OGPPacManClient.Client.Chat.Order;
 
-//using OGPPacManClient.PuppetMaster;
-
 namespace OGPPacManClient.Client.Chat {
     internal class ChatController : MarshalByRefObject {
         private const string EndpointName = "ClientChat";
@@ -38,6 +36,10 @@ namespace OGPPacManClient.Client.Chat {
 
         public void AddClients(List<ConnectedClient> clients) {
             messager.AddClients(clients.Select(c => (c.Id, c.Url)).ToList());
+        }
+
+        public IList<(int Id, string URL, bool isDead)> ListClientsInfo() {
+            return messager.ListClientsInfo();
         }
     }
 }

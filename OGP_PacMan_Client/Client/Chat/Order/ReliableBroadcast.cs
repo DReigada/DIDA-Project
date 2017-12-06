@@ -44,18 +44,20 @@ namespace OGPPacManClient.Client.Chat.Order {
 
         private void DoSendMessage(WrappedMessage<M> wrappedMessage) {
             new Thread(() =>
-                OtherClients.AsParallel().ForAll(a => sendMessageToClient(a, wrappedMessage))
+                OtherClients.AsParallel().ForAll(c => sendMessageToClient(c.Value, wrappedMessage))
             ).Start();
         }
 
         private void sendMessageToClient(
-            KeyValuePair<int, ReliableBroadcast<M>> keyValue,
+            ClientWithInfo<ReliableBroadcast<M>> client,
             WrappedMessage<M> wrappedMessage) {
             try {
-                keyValue.Value.ReceiveMessage(wrappedMessage);
+                client.Client.ReceiveMessage(wrappedMessage);
+                client.IsDead = false;
             }
             catch (SocketException) {
-                Console.WriteLine($"Failed to send message to client: {keyValue.Key}");
+                client.IsDead = true;
+                Console.WriteLine($"Failed to send message to client: {client.Id}");
             }
         }
     }

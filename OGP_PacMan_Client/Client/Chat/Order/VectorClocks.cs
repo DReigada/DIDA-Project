@@ -70,6 +70,10 @@ namespace OGPPacManClient.Client.Chat {
             broadcast.Start();
         }
 
+        public IList<(int Id, string URL, bool isDead)> ListClientsInfo() {
+            return broadcast.ListClientsInfo();
+        }
+
         public void ReceiveMessage(WrappedMessage<M> message) {
             lock (this) {
                 messagesToDeliver.Add((message.SenderId, message.messageId), message);

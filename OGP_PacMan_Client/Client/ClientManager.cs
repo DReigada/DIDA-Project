@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
@@ -9,6 +10,7 @@ using ClientServerInterface.Server;
 using OGPPacManClient.Client.Chat;
 using OGPPacManClient.Client.Movement;
 using OGPPacManClient.Interface;
+using OGPPacManClient.PuppetMaster;
 
 namespace OGPPacManClient.Client {
     internal class ClientManager {
@@ -48,6 +50,17 @@ namespace OGPPacManClient.Client {
             var clientInfo = new ClientInfo($"tcp://{clientIP}:{clientPort}");
             var gameProps = server.RegisterClient(clientInfo);
             InitializeControllers(gameProps);
+
+            InitializePuppet();
+        }
+
+        public void InitializePuppet() {
+            ClientPuppet.Instance.ListClientsInfo = chatController.ListClientsInfo;
+            ClientPuppet.Instance.ListServersInfo = GetServerInfo;
+        }
+
+        public IList<(int, string, bool)> GetServerInfo() {
+            return new List<(int, string, bool)> {(1, serverURL, moveController.GetServerStatus())};
         }
 
         public void UseMovementFile(string file) {

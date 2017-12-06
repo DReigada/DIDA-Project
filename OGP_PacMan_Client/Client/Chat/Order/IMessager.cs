@@ -10,5 +10,7 @@ namespace OGPPacManClient.Client.Chat.Order {
         void AddClients(List<(int Id, string URL)> clients);
 
         void Start();
+
+        IList<(int Id, string URL, bool isDead)> ListClientsInfo();
     }
 }

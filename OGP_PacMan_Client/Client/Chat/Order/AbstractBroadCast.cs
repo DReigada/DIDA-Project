@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Remoting;
 using OGPPacManClient.PuppetMaster;
 
@@ -18,17 +19,32 @@ namespace OGPPacManClient.Client.Chat.Order {
         public int messageId { get; }
     }
 
+    internal class ClientWithInfo<Impl> {
+        public ClientWithInfo(Impl client, string url, int id) {
+            Client = client;
+            URL = url;
+            IsDead = false;
+            Id = id;
+        }
+
+        public Impl Client { get; }
+        public string URL { get; }
+        public int Id { get; }
+
+        public bool IsDead { get; set; }
+    }
+
     internal abstract class AbstractBroadcast<M, Impl> : MarshalByRefObject, IMessager<M>
         where Impl : AbstractBroadcast<M, Impl> {
         private readonly string EndpointName;
 
-        protected readonly IDictionary<int, Impl> OtherClients;
+        protected readonly IDictionary<int, ClientWithInfo<Impl>> OtherClients;
         protected readonly int selfId;
 
         protected AbstractBroadcast(int selfId, string endpointName) {
             EndpointName = endpointName;
             this.selfId = selfId;
-            OtherClients = new ConcurrentDictionary<int, Impl>();
+            OtherClients = new ConcurrentDictionary<int, ClientWithInfo<Impl>>();
         }
 
         public event Action<M> ReceivedMessage;
@@ -37,11 +53,12 @@ namespace OGPPacManClient.Client.Chat.Order {
 
 
         public void AddClients(List<(int Id, string URL)> clients) {
-            lock (OtherClients){
+            lock (OtherClients) {
                 clients.ForEach(client => {
-                    if (client.Id != selfId && !OtherClients.ContainsKey(client.Id)){
+                    if (client.Id != selfId && !OtherClients.ContainsKey(client.Id)) {
                         var newClient = ConnectToClient(client.URL);
-                        OtherClients.Add(client.Id, newClient);
+                        var newClientWithInfo = new ClientWithInfo<Impl>(newClient, client.URL, client.Id);
+                        OtherClients.Add(client.Id, newClientWithInfo);
                     }
                 });
             }
@@ -49,6 +66,12 @@ namespace OGPPacManClient.Client.Chat.Order {
 
         public void Start() {
             RemotingServices.Marshal(this, EndpointName);
+        }
+
+        public IList<(int Id, string URL, bool isDead)> ListClientsInfo() {
+            lock (OtherClients) {
+                return OtherClients.Select(c => (c.Key, c.Value.URL, c.Value.IsDead)).ToList();
+            }
         }
 
         protected void CallReceivedMessage(M m) {
@@ -64,7 +87,7 @@ namespace OGPPacManClient.Client.Chat.Order {
         public abstract void DoReceiveMessage(WrappedMessage<M> message);
 
 
-            public Impl ConnectToClient(string clientUrl) {
+        public Impl ConnectToClient(string clientUrl) {
             return (Impl)
                 Activator.GetObject(
                     typeof(Impl),

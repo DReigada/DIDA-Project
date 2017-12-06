@@ -7,6 +7,7 @@ namespace OGPPacManClient.Client.Movement {
     public abstract class AbstractMovementController {
         private readonly Timer timer;
         private readonly int userId;
+        private bool isServerDead;
         private IPacmanServer server;
 
         protected AbstractMovementController(IPacmanServer server, int delta, int userId) {
@@ -14,6 +15,7 @@ namespace OGPPacManClient.Client.Movement {
             this.server = server;
             timer = new Timer(delta) {AutoReset = true};
             timer.Elapsed += (sender, args) => NotifyServer();
+            isServerDead = true;
         }
 
         public abstract ClientServerInterface.PacMan.Server.Movement.Direction GetDirection();
@@ -33,8 +35,10 @@ namespace OGPPacManClient.Client.Movement {
                     var mov = new ClientServerInterface.PacMan.Server.Movement(userId, dir);
                     server.SendAction(mov);
                 }
+                isServerDead = false;
             }
             catch (SocketException) {
+                isServerDead = true;
                 Console.WriteLine("Server is dead");
             }
         }
@@ -42,6 +46,11 @@ namespace OGPPacManClient.Client.Movement {
         public void setNewServer(IPacmanServer server) {
             Console.WriteLine("NEW SERVER");
             this.server = server;
+            isServerDead = false;
+        }
+
+        public bool GetServerStatus() {
+            return isServerDead;
         }
     }
 }
