@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace OGPServices {
@@ -6,8 +8,20 @@ namespace OGPServices {
         private readonly object freezeLock = new object();
         private bool isFrozen;
 
+        protected BaseProcess() {
+            ListClientsInfo = () => new List<(int Id, string URL, bool isDead)>();
+            ListServersInfo = () => new List<(int Id, string URL, bool isDead)>();
+        }
 
-        public abstract void GlobalStatus();
+        public Func<IList<(int Id, string URL, bool isDead)>> ListClientsInfo { get; set; }
+        public Func<IList<(int Id, string URL, bool isDead)>> ListServersInfo { get; set; }
+
+        public void GlobalStatus() {
+            var clients = string.Join("\n", ListClientsInfo().Select(createString));
+            var servers = string.Join("\n", ListServersInfo().Select(createString));
+
+            Console.WriteLine($"GlobalStatus\nClients:\n{clients}\n Servers:\n{servers}");
+        }
 
         public abstract void LocalStatus(int round_id);
 
@@ -34,6 +48,10 @@ namespace OGPServices {
             lock (freezeLock) {
                 while (isFrozen) Monitor.Wait(freezeLock);
             }
+        }
+
+        private string createString((int Id, string URL, bool isDead) tuple) {
+            return $"{tuple.Id} {tuple.URL}, {tuple.isDead}";
         }
     }
 }

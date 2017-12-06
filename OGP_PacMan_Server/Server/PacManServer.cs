@@ -97,7 +97,7 @@ namespace OGP_PacMan_Server.Server {
         }
 
         public GameProps RegisterClient(ClientInfo client) {
-            ServerPuppet.Wait();
+            ServerPuppet.Instance.Wait();
             lock (pacManClients) {
                 if (slave != null) {
                     Console.WriteLine("here");
@@ -128,7 +128,7 @@ namespace OGP_PacMan_Server.Server {
         }
 
         public void SendAction(Movement movement) {
-            ServerPuppet.Wait();
+            ServerPuppet.Instance.Wait();
             game.AddMovements(movement);
             if (slave != null) slave.SendAction(movement);
         }
@@ -142,7 +142,7 @@ namespace OGP_PacMan_Server.Server {
         }
 
         public GameState GetGameState(SlaveInfo slaveInfo) {
-            ServerPuppet.Wait();
+            ServerPuppet.Instance.Wait();
             var gameState = new GameState(game.State, clients, game.NewMovements);
             slave = (IPacManSlave) Activator.GetObject(typeof(IPacManSlave), slaveInfo.Url + "/PacManServer");
             if (proofTimer.Enabled == false) proofTimer.Enabled = true;
@@ -150,7 +150,7 @@ namespace OGP_PacMan_Server.Server {
         }
 
         public void IAmAlive(TimeSpan time) {
-            ServerPuppet.Wait();
+            ServerPuppet.Instance.Wait();
             LastProof = time;
             if (proofTimer.Enabled == false) proofTimer.Enabled = true;
         }
@@ -160,7 +160,7 @@ namespace OGP_PacMan_Server.Server {
         }
 
         public void LifeProof() {
-            ServerPuppet.Wait();
+            ServerPuppet.Instance.Wait();
             if (isMaster) {
                 var time = DateTime.Now.TimeOfDay;
                 if (slave != null) //Console.WriteLine(time);
@@ -204,7 +204,7 @@ namespace OGP_PacMan_Server.Server {
         }
 
         public void UpdateState() {
-            ServerPuppet.Wait();
+            ServerPuppet.Instance.Wait();
             var board = game.State;
             try {
                 if (isMaster) foreach (var pacManClient in pacManClients) pacManClient.UpdateState(board);
@@ -214,12 +214,12 @@ namespace OGP_PacMan_Server.Server {
         }
 
         public void UpdateSlave(Board board) {
-            ServerPuppet.Wait();
+            ServerPuppet.Instance.Wait();
             game.State = board;
         }
 
         public void UpdateConnectedClients() {
-            ServerPuppet.Wait();
+            ServerPuppet.Instance.Wait();
             lock (pacManClients) {
                 foreach (var pacManClient in pacManClients) pacManClient.UpdateConnectedClients(clients);
             }
