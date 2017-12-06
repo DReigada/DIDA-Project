@@ -55,7 +55,7 @@ namespace OGP_PacMan_Server {
                         Console.WriteLine(port);
                         Console.WriteLine(url);
                         Console.WriteLine(masterUrl);
-                        var server = new PacManServer(mseconsRound, numberPlayers, url, masterUrl, false);
+                        var server = new PacManServer(mseconsRound, numberPlayers);
                         RemotingServices.Marshal(server, "PacManServer", typeof(PacManServer));
                     }
                     break;

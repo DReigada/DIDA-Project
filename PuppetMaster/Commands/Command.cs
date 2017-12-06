@@ -32,5 +32,6 @@ namespace PuppetMaster.commands {
         public void printErrorMsg() {
             Console.Write("[ERROR]: In {0} command. For more info type <Help>\n", cmd);
         }
+
     }
 }

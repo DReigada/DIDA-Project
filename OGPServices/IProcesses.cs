@@ -8,8 +8,8 @@ namespace OGPServices {
         void Crash();
         void Freeze();
         void GlobalStatus();
-        void LocalStatus();
-        void InjectDelay();
+        void LocalStatus(int round_id);
+        void InjectDelay(string pid_dest);
         void Unfreeze();
         void Wait();
     }

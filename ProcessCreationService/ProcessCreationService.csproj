@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProcessCreationService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -53,6 +54,10 @@
     <ProjectReference Include="..\OGPServices\OGPServices.csproj">
       <Project>{d8db8b38-c883-47f5-be5d-1b3bdd349ecb}</Project>
       <Name>OGPServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OGP_PacMan_Server\OGP_PacMan_Server.csproj">
+      <Project>{8546596E-F20B-4EBB-8A53-72C2F660329E}</Project>
+      <Name>OGP_PacMan_Server</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using OGPServices;
@@ -12,37 +13,24 @@ namespace PuppetMaster.commands {
 
 
         public override void Execute(string[] args) {
-            if (args.Length != 1) { //just for test, must be 1
+            if (args.Length != 1){
                 printErrorMsg();
                 return;
             }
 
-            List<IProcesses> pmProcessesList;
             string pid = args[0];
-            bool tryGetValue = shell.processesProxies.TryGetValue(pid, out pmProcessesList);
-            if (tryGetValue) {
-                printErrorMsg();
-                return;
-            }
-
-
-            int pid_copy;
-            try {
-                pid_copy = int.Parse(args[0]);
-                if (pid_copy >= pmProcessesList.Count)
-                    throw new Exception();
-            }
-            catch (Exception)  {
-                printErrorMsg();
+            IProcesses procProxies;
+            bool isValid = shell.processes.TryGetValue(pid, out procProxies);
+            if (!isValid){
+                Console.WriteLine("[Freeze] There isn't such Process Id: \"{0}\"", pid);
                 return;
             }
             try {
-                pmProcessesList[pid_copy].Freeze();
+                shell.processes[pid].Freeze();
             }
-            catch (Exception e) {
-                Console.WriteLine("[FreezeCommand] Could not freeze. {0}.", e.Message);
+            catch (Exception e){
+                Console.WriteLine("[Freeze] ERROR: {0}.", e.Message);
             }
-
         }
     }
 }
