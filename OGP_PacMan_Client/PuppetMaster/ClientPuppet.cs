@@ -4,12 +4,19 @@ using OGPServices;
 
 namespace OGPPacManClient.PuppetMaster {
     public class ClientPuppet : MarshalByRefObject, IProcesses {
-        private static readonly object obj = new object();
-        private static bool cond;
+        private static readonly object freezeLock = new object();
+        private static bool isFrozen;
+
+        private static ClientPuppet _instance;
+
+        private ClientPuppet() {
+        }
+
+        public static ClientPuppet Instance => _instance ?? (_instance = new ClientPuppet());
 
         public void Wait() {
-            lock (obj){
-                while (cond) Monitor.Wait(obj);
+            lock (freezeLock) {
+                while (isFrozen) Monitor.Wait(freezeLock);
             }
         }
 
@@ -18,19 +25,19 @@ namespace OGPPacManClient.PuppetMaster {
         }
 
         public void Unfreeze() {
-            lock (obj){
-                cond = false;
-                Monitor.PulseAll(cond);
+            lock (freezeLock) {
+                isFrozen = false;
+                Monitor.PulseAll(isFrozen);
             }
         }
 
         public void Crash() {
-            throw new NotImplementedException();
+            Environment.Exit(1);
         }
 
         public void Freeze() {
-            lock (obj){
-                cond = true;
+            lock (freezeLock) {
+                isFrozen = true;
             }
         }
 
@@ -40,10 +47,6 @@ namespace OGPPacManClient.PuppetMaster {
 
         public void LocalStatus() {
             throw new NotImplementedException();
-        }
-
-        public void Kill() {
-            Environment.Exit(1);
         }
     }
 }

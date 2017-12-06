@@ -29,7 +29,7 @@ namespace OGPPacManClient.Client.Chat.Order {
         }
 
 
-        public override void ReceiveMessage(WrappedMessage<M> message) {
+        public override void DoReceiveMessage(WrappedMessage<M> message) {
             lock (this) {
                 var msgId = (message.SenderId, message.messageId);
 

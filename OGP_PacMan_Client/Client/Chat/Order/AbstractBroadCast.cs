@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Runtime.Remoting;
+using OGPPacManClient.PuppetMaster;
 
 namespace OGPPacManClient.Client.Chat.Order {
     [Serializable]
@@ -55,9 +56,15 @@ namespace OGPPacManClient.Client.Chat.Order {
         }
 
         // This should be protected but protected methods can't be called remotely
-        public abstract void ReceiveMessage(WrappedMessage<M> message);
+        public void ReceiveMessage(WrappedMessage<M> message) {
+            ClientPuppet.Instance.Wait();
+            DoReceiveMessage(message);
+        }
 
-        public Impl ConnectToClient(string clientUrl) {
+        public abstract void DoReceiveMessage(WrappedMessage<M> message);
+
+
+            public Impl ConnectToClient(string clientUrl) {
             return (Impl)
                 Activator.GetObject(
                     typeof(Impl),
