@@ -20,13 +20,13 @@ namespace OGPPacManClient.Client {
         private readonly int clientPort;
 
         private readonly Form1 form;
-
-
-        private readonly string serverURL;
         private ChatController chatController;
         private AbstractMovementController moveController;
         private string movementFile;
         private IPacmanServer server;
+
+
+        private string serverURL;
 
         public ClientManager(string clientIP, int clientPort, string serverURL) {
             this.clientIP = clientIP;
@@ -108,6 +108,7 @@ namespace OGPPacManClient.Client {
 
         private void UpdateServer(string url) {
             Console.WriteLine(url);
+            serverURL = url;
             server = (IPacmanServer) Activator.GetObject(typeof(IPacmanServer), url + "/PacManServer");
             moveController.setNewServer(server);
         }
