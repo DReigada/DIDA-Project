@@ -1,5 +1,5 @@
 ﻿namespace OGP_PacMan_Server.Server {
-    internal class ClientWithInfo<TClient> {
+    public class ClientWithInfo<TClient> {
         public ClientWithInfo(TClient client, string url, int id) {
             Client = client;
             URL = url;

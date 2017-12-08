@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ClientServerInterface.Client;
+using ClientServerInterface.PacMan.Client;
 using ClientServerInterface.PacMan.Client.Game;
 using ClientServerInterface.PacMan.Server;
+using OGP_PacMan_Server.Server;
 
 namespace OGP_PacMan_Server.Game.PacMan {
     public class PacManGame : IGame<Board> {
@@ -48,7 +50,7 @@ namespace OGP_PacMan_Server.Game.PacMan {
         
         public bool GameEnded { get; private set; }
 
-        public void Start(List<ConnectedClient> clients) {
+        public void Start() {
             var coinCounter = 1;
            
             List<ServerGhost> ghosts = new List<ServerGhost>();
@@ -198,7 +200,6 @@ namespace OGP_PacMan_Server.Game.PacMan {
         }
 
         public bool CheckGhostWallCollision(ServerGhost ghost) {
-            //TODO:test
             foreach (var wall in walls)
                 if (wall.Position.X - wall.Width <= ghost.Position.X &&
                     ghost.Position.X - ghostSize <= wall.Position.X &&

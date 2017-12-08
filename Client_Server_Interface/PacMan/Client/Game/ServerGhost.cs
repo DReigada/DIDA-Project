@@ -1,6 +1,8 @@
-﻿using ClientServerInterface.PacMan.Client.Game;
+﻿using System;
+using ClientServerInterface.PacMan.Client.Game;
 
 namespace OGP_PacMan_Server.Game.PacMan {
+    [Serializable]
     public class Speed {
         public Speed(int x, int y) {
             X = x;
@@ -15,6 +17,7 @@ namespace OGP_PacMan_Server.Game.PacMan {
         }
     }
 
+    [Serializable]
     public class ServerGhost : Ghost {
         public ServerGhost(GhostColor color, Position pos, int id, Speed speed) : base(color, pos, id) {
             Speed = speed;

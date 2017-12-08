@@ -33,7 +33,7 @@ namespace OGP_PacMan_Server {
                     Console.WriteLine(port);
                     if (game.Equals("Pacman")){
                         url = "tcp://" + ip + ":" + port;
-                        var server = new PacManServer(mseconsRound, numberPlayers, url, true);
+                        var server = new PacManServer(mseconsRound, numberPlayers, url);
                         RemotingServices.Marshal(server, "PacManServer", typeof(PacManServer));
                     }
                     break;
@@ -55,7 +55,7 @@ namespace OGP_PacMan_Server {
                         Console.WriteLine(port);
                         Console.WriteLine(url);
                         Console.WriteLine(masterUrl);
-                        var server = new PacManServer(mseconsRound, numberPlayers, url, masterUrl, false);
+                        var server = new PacManServer(mseconsRound, numberPlayers, url, masterUrl);
                         RemotingServices.Marshal(server, "PacManServer", typeof(PacManServer));
                     }
                     break;

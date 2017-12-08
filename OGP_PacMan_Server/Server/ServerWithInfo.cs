@@ -1,6 +1,8 @@
-﻿using OGP_PacMan_Server.Slave;
+﻿using System;
+using OGP_PacMan_Server.Slave;
 
 namespace OGP_PacMan_Server.Server {
+    [Serializable]
     public class ServerWithInfo<TServer> {
         public ServerWithInfo(TServer server, string url, bool isMaster) {
             Server = server;
@@ -13,7 +15,7 @@ namespace OGP_PacMan_Server.Server {
             return new ServerInternalInfo(URL, IsDead, IsMaster);
         }
 
-        public TServer Server { get; }
+        public TServer Server { get; set; }
         public string URL { get; }
         public bool IsDead { get; set; }
         public bool IsMaster { get; set; }

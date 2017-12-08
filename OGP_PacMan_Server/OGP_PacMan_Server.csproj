@@ -46,12 +46,11 @@
     <Compile Include="Game\IGame.cs" />
     <Compile Include="Game\PacMan\PacManGame.cs" />
     <Compile Include="Game\PacMan\Wall.cs" />
+    <Compile Include="Server\FaultTolerenceServer.cs" />
     <Compile Include="Server\ServerWithInfo.cs" />
     <Compile Include="Server\ClientWithInfo.cs" />
     <Compile Include="Slave\ServerInternalInfo.cs" />
-    <Compile Include="Slave\ISlave.cs" />
     <Compile Include="Slave\PacMan\GameState.cs" />
-    <Compile Include="Slave\PacMan\IPacManSlave.cs" />
     <Compile Include="PuppetMaster\ServerPuppet.cs" />
     <Compile Include="Server\PacManServer.cs" />
     <Compile Include="Program.cs" />

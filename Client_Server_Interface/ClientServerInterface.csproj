@@ -56,6 +56,7 @@
     <Compile Include="PacMan\Server\IPacManServer.cs" />
     <Compile Include="PacMan\Server\Movement.cs" />
     <Compile Include="Server\ClientInfo.cs" />
+    <Compile Include="Server\IInternalServer.cs" />
     <Compile Include="Server\IServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
