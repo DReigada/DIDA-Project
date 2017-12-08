@@ -7,13 +7,13 @@ using ClientServerInterface.PacMan.Server;
 namespace OGP_PacMan_Server.Slave.PacMan {
     [Serializable]
     public class GameState {
-        public GameState(Board board, List<ConnectedClient> clients, List<Movement> newMovements) {
-            Board = board;
+        public GameState(List<Board> boards, List<ConnectedClient> clients, List<Movement> newMovements) {
+            Boards = boards;
             Clients = clients;
             NewMovements = newMovements;
         }
 
-        public Board Board { get; }
+        public List<Board> Boards { get; }
 
         public List<ConnectedClient> Clients { get; }
 

@@ -1,11 +1,12 @@
 ﻿using System;
-using ClientServerInterface.Server;
+using System.Collections.Generic;
+using OGP_PacMan_Server.Server;
 
 namespace OGP_PacMan_Server.Slave {
-    public interface ISlave<TAction, TGameState> {
-        void UpdatSlaveClient(ClientInfo clientInfo);
+    public interface ISlave<TGameState> {
+        void UpdateState();
 
-        void SendSlaveAction(TAction action);
+        void UpdateSlaveList(List<SlaveInfo> servers);
 
         TGameState GetGameState(SlaveInfo slaveInfo);
 
