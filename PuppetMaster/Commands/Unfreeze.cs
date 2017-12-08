@@ -26,7 +26,7 @@ namespace PuppetMaster.commands {
                 shell.processes[pid].Unfreeze();
             }
             catch (Exception e){
-                Console.WriteLine("[Unfreeze] ERROR: {0}.", e.Message);
+               // Console.WriteLine("[Unfreeze] ERROR: {0}.", e.Message);
             }
         }
     }

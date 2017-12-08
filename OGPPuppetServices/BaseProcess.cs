@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace OGPServices {
     public abstract class BaseProcess : MarshalByRefObject, IProcesses {
-        private static readonly int DELAY_TIME_MS = 300;
+        private static readonly int DELAY_TIME_MS = 3000;
 
         private readonly object freezeLock = new object();
         private bool isFrozen;
@@ -37,6 +37,7 @@ namespace OGPServices {
 
         public void InjectDelay(string url_dest) {
             lock (delayedURLs) {
+                Console.WriteLine("OLOLJIUHJGHJFGHFHGFHVHVHVHJB");
                 delayedURLs.Add(url_dest);
             }
         }

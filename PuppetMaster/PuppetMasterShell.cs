@@ -81,7 +81,7 @@ namespace PuppetMaster {
             else {
                 string[] cmdArgs = args.Skip(1).ToArray(); //only command args 
 
-                //await Task.Delay(200);
+                //await Task.Delay(5000);
                 System.Threading.Thread.Sleep(300);
                 new Thread(() => command.Execute(cmdArgs)).Start();
                 //command.Execute(cmdArgs);
@@ -99,14 +99,17 @@ namespace PuppetMaster {
 
                 string[] args = input.Split(' ');
                 string cmd = args[0];
-                Command command = getCommand(cmd);
+                string[] cmdArgs = args.Skip(1).ToArray();
                 if (string.Equals(cmd, "wait", StringComparison.OrdinalIgnoreCase)){
-                    string[] cmdArgs = args.Skip(1).ToArray();
-                    command.Execute(cmdArgs);
+                    doWait(cmdArgs);
                 }
-
                 doCommandAsync(input);
             }
+        }
+
+        public void doWait(string[] x_ms) {
+            Command command = getCommand("Wait");
+            command.Execute(x_ms);
         }
 
         private void parseConfigFile(){
@@ -150,6 +153,13 @@ namespace PuppetMaster {
                 else{
                     Console.WriteLine("{0} \"{1}\"", prompt, inputLine);
                 }
+
+                if (string.Equals("wait", command, StringComparison.OrdinalIgnoreCase)){
+                    string[] cmdArgs = args.Skip(1).ToArray();
+                    doWait(cmdArgs);
+                }
+
+                System.Threading.Thread.Sleep(50);
                 doCommandAsync(inputLine);
             }
             Console.WriteLine("[CONFIGURATION] END!");

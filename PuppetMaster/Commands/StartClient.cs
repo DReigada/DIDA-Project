@@ -24,7 +24,7 @@ namespace PuppetMaster.commands {
                 String port = args[2].Split(':')[2].Split('/')[0];
                 string url = $"tcp://{ip}:{port}/Puppet";
 
-                //System.Threading.Thread.Sleep(20);
+                System.Threading.Thread.Sleep(100);
 
                 IProcesses client = (IProcesses) Activator.GetObject(typeof(IProcesses), url);
 
@@ -43,6 +43,8 @@ namespace PuppetMaster.commands {
                 String ip = args[2].Split('/')[2].Split(':')[0];
                 String port = args[2].Split(':')[2].Split('/')[0];
                 string url = $"tcp://{ip}:{port}/Puppet";
+
+                System.Threading.Thread.Sleep(100);
 
                 IProcesses client = (IProcesses) Activator.GetObject(typeof(IProcesses), url);
                 shell.processes.Add(args[0], client);
