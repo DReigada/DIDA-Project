@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace OGPServices {
     public abstract class BaseProcess : MarshalByRefObject, IProcesses {
-        private static readonly int DELAY_TIME_MS = 3000;
+        private static readonly int DELAY_TIME_MS = 1000;
 
         private readonly object freezeLock = new object();
         private bool isFrozen;
