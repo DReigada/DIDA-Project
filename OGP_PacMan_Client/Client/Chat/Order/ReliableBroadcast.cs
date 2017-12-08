@@ -46,7 +46,6 @@ namespace OGPPacManClient.Client.Chat.Order {
         private void DoSendMessage(WrappedMessage<M> wrappedMessage) {
             new Thread(() =>
                 OtherClients.AsParallel().ForAll(c => {
-                    ClientPuppet.Instance.DoDelay(c.Value.URL);
                     sendMessageToClient(c.Value, wrappedMessage);
                 })
             ).Start();
@@ -56,6 +55,7 @@ namespace OGPPacManClient.Client.Chat.Order {
             ClientWithInfo<ReliableBroadcast<M>> client,
             WrappedMessage<M> wrappedMessage) {
             try {
+                ClientPuppet.Instance.DoDelay(client.URL);
                 client.Client.ReceiveMessage(wrappedMessage);
                 client.IsDead = false;
             }
