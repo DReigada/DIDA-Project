@@ -11,6 +11,7 @@ namespace OGPServices {
 
         protected BaseProcess() {
             RemotingServices.Marshal(this, "Puppet");
+            Console.WriteLine("Initilized BaseProcess");
 
             ListClientsInfo = () => new List<(int Id, string URL, bool isDead)>();
             ListServersInfo = () => new List<(int Id, string URL, bool isDead)>();

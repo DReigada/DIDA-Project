@@ -21,9 +21,9 @@ namespace PuppetMaster {
 
         public static readonly string PCS_URL = "tcp://localhost:11000/PCS";
 
-        private string prompt = "[PuppetMaster] >>> ";
+        public string prompt = "[PuppetMaster] >>> ";
         //public Dictionary<string, List<IProcesses>> servers = new Dictionary<string, List<IProcesses>>();
-        //public Dictionary<string, List<IProcesses>> clients = new Dictionary<string, List<IProcesses>>();
+        public Dictionary<string, String> processesURLs = new Dictionary<string, String>();
         public Dictionary<string, IProcesses> processes = new Dictionary<string, IProcesses>();
 
         //Dictionary<string, IProcessCreationService> pcs_list = new Dictionary<string, IProcessCreationService>();
@@ -70,7 +70,7 @@ namespace PuppetMaster {
             return null;
         }
 
-        public void doCommand(string input) {
+        public async Task doCommandAsync(string input) {
             string[] args = input.Split(' ');
             string cmd = args[0];
 
@@ -80,20 +80,32 @@ namespace PuppetMaster {
             }
             else {
                 string[] cmdArgs = args.Skip(1).ToArray(); //only command args 
-                command.Execute(cmdArgs);
+
+                //await Task.Delay(200);
+                System.Threading.Thread.Sleep(300);
+                new Thread(() => command.Execute(cmdArgs)).Start();
+                //command.Execute(cmdArgs);
             }
         }
 
         public void start() {
-            Console.WriteLine("[PuppetMaster] Starting PuppetMaster...");
-            Console.WriteLine("[PuppetMaster] PuppetMaster started. Type <help> for more info");
+            Console.WriteLine("[PuppetMaster] Type <help> for more info");
             while (true) {
                 Console.Write(prompt);
                 string input = Console.ReadLine();
                 if (input == null) {
                     continue;
                 }
-                doCommand(input);
+
+                string[] args = input.Split(' ');
+                string cmd = args[0];
+                Command command = getCommand(cmd);
+                if (string.Equals(cmd, "wait", StringComparison.OrdinalIgnoreCase)){
+                    string[] cmdArgs = args.Skip(1).ToArray();
+                    command.Execute(cmdArgs);
+                }
+
+                doCommandAsync(input);
             }
         }
 
@@ -138,9 +150,9 @@ namespace PuppetMaster {
                 else{
                     Console.WriteLine("{0} \"{1}\"", prompt, inputLine);
                 }
-                doCommand(inputLine);
+                doCommandAsync(inputLine);
             }
-            Console.WriteLine("[CONFIGURATION] Sucessfully read main config file!");
+            Console.WriteLine("[CONFIGURATION] END!");
         }
     }
 }

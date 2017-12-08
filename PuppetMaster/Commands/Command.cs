@@ -30,7 +30,7 @@ namespace PuppetMaster.commands {
         abstract public void Execute(string[] args);
 
         public void printErrorMsg() {
-            Console.Write("[ERROR]: In {0} command. For more info type <Help>\n", cmd);
+            Console.Write("[ERROR]: In {0} command. For more info type <Help>\n{1}", cmd, shell.prompt);
         }
 
     }

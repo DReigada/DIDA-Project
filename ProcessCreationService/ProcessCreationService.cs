@@ -59,7 +59,7 @@ namespace ProcessCreationService {
         }
 
     
-        public void createClientWithFilename(string pid, string clientURL, string filename)
+        public void createClient(string pid, string clientURL, string filename)
         {
             String clientIp = clientURL.Split('/')[2].Split(':')[0];
             String clientPort = clientURL.Split(':')[2].Split('/')[0];

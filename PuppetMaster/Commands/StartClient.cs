@@ -7,20 +7,46 @@ using OGPServices;
 
 namespace PuppetMaster.commands {
     class StartClient : Command {
-        public StartClient(PuppetMasterShell shell) : base(shell, "StartClient","StartClient PID PCS_URL CLIENT_URL MSEC_PER_ROUND NUM_PLAYERS ") {
+        public StartClient(PuppetMasterShell shell) : base(shell, "StartClient","StartClient PID PCS_URL CLIENT_URL MSEC_PER_ROUND NUM_PLAYERS") {
         }
 
         public override void Execute(string[] args) {
             if(args.Length == 5){
+                IProcesses procProxies;
+                bool exists = shell.processes.TryGetValue(args[0], out procProxies);
+                if (exists) {
+                    Console.WriteLine("[StartClient] There is already a process with this id: \"{0}\"", args[0]);
+                    return;
+                }
                 shell.connectPCS(args[1]).createClient(args[0], args[2]); // string clientIP, int clientPort, string serverURL
-                IProcesses client = (IProcesses) Activator.GetObject(typeof(IProcesses), args[2]);
-                //List<IProcesses> procProxies = new List<IProcesses>();
-                //procProxies.Add(client);
+
+                String ip = args[2].Split('/')[2].Split(':')[0];
+                String port = args[2].Split(':')[2].Split('/')[0];
+                string url = $"tcp://{ip}:{port}/Puppet";
+
+                //System.Threading.Thread.Sleep(20);
+
+                IProcesses client = (IProcesses) Activator.GetObject(typeof(IProcesses), url);
+
                 shell.processes.Add(args[0], client);
+                shell.processesURLs.Add(args[0], args[2]);
             }
             else if (args.Length == 6){ //has filename
-                shell.connectPCS(args[1]).createClientWithFilename(args[0], args[2], args[5]);
-                IProcesses client = (IProcesses)Activator.GetObject(typeof(IProcesses), args[2]);
+                IProcesses procProxies;
+                bool exists = shell.processes.TryGetValue(args[0], out procProxies);
+                if (exists){
+                    Console.WriteLine("[StartClient] There is already a process with this id: \"{0}\"", args[0]);
+                    return;
+                }
+                shell.connectPCS(args[1]).createClient(args[0], args[2], args[5]);
+
+                String ip = args[2].Split('/')[2].Split(':')[0];
+                String port = args[2].Split(':')[2].Split('/')[0];
+                string url = $"tcp://{ip}:{port}/Puppet";
+
+                IProcesses client = (IProcesses) Activator.GetObject(typeof(IProcesses), url);
+                shell.processes.Add(args[0], client);
+                shell.processesURLs.Add(args[0], args[2]);
             }
             else 
                 printErrorMsg();
