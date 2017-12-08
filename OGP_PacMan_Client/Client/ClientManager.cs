@@ -58,6 +58,7 @@ namespace OGPPacManClient.Client {
         public void InitializePuppet() {
             ClientPuppet.Instance.ListClientsInfo = chatController.ListClientsInfo;
             ClientPuppet.Instance.ListServersInfo = GetServerInfo;
+            ClientPuppet.Instance.GetRoundInfo = i => client.GetRoundBoard(i).PrettyString();
         }
 
         public IList<(int, string, bool)> GetServerInfo() {
@@ -82,7 +83,8 @@ namespace OGPPacManClient.Client {
 
         private void CreateAndStartMovController(GameProps props) {
             if (movementFile != null)
-                moveController = new MixedMovementController(movementFile, form, server, serverURL, props.GameSpeed, props.UserId);
+                moveController = new MixedMovementController(movementFile, form, server, serverURL, props.GameSpeed,
+                    props.UserId);
             else
                 moveController = new MovementController(form, server, serverURL, props.GameSpeed, props.UserId);
 

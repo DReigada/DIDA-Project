@@ -8,7 +8,7 @@ namespace OGPServices {
         void Crash();
         void Freeze();
         void GlobalStatus();
-        void LocalStatus(int round_id);
+        string LocalStatus(int round_id);
         void InjectDelay(string url_dest);
         void Unfreeze();
         void Wait();
