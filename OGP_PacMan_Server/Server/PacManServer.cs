@@ -207,20 +207,22 @@ namespace OGP_PacMan_Server.Server {
 
             if (!isMaster) return;
 
-            pacManClients.AsParallel().ForAll(pacManClient =>
-                new Thread(() => {
-                    try {
-                        pacManClient.Client.UpdateState(board);
-                        pacManClient.IsDead = false;
-                    }
-                    catch (SocketException) {
-                        if (!pacManClient.IsDead) {
-                            Console.WriteLine($"Client {pacManClient.Id} is dead");
-                            pacManClient.IsDead = true;
+
+            new Thread(() => {
+                pacManClients.AsParallel().ForAll(pacManClient => {
+                        try {
+                            pacManClient.Client.UpdateState(board);
+                            pacManClient.IsDead = false;
+                        }
+                        catch (SocketException) {
+                            if (!pacManClient.IsDead) {
+                                Console.WriteLine($"Client {pacManClient.Id} is dead");
+                                pacManClient.IsDead = true;
+                            }
                         }
                     }
-                }).Start()
-            );
+                );
+            }).Start();
         }
 
         public void UpdateSlave(Board board) {
