@@ -39,7 +39,7 @@ namespace OGP_PacMan_Server.Server {
 
             lifeCheckTimer = new Timer();
             lifeCheckTimer.Elapsed += (a, b) => CheckLifeProof();
-            lifeCheckTimer.Interval = gameSpeed;
+            lifeCheckTimer.Interval = gameSpeed * 5;
         }
 
         public FaultTolerenceServer(string myUrl, int gameSpeed, int lifeCheckDelay,
@@ -58,25 +58,32 @@ namespace OGP_PacMan_Server.Server {
 
             lifeCheckTimer = new Timer();
             lifeCheckTimer.Elapsed += (a, b) => CheckLifeProof();
-            lifeCheckTimer.Interval = gameSpeed;
-
+            lifeCheckTimer.Interval = gameSpeed * 5;
+            
+            Console.WriteLine("Master");
             Console.WriteLine(masterUrl);
+            Console.WriteLine("Master");
 
             var master = (FaultTolerenceServer) Activator.GetObject(typeof(FaultTolerenceServer),
                 masterUrl + "/FTServer");
 
             Servers = master.RegisterNewSlave(new ServerInternalInfo(myUrl, false, false));
 
-            personalMaster = Servers.Last().URL;
+            Console.WriteLine("PersonalMaster");
+            Console.WriteLine(Servers[Servers.Count - 2].URL);
+            Console.WriteLine("PersonalMaster");
+
+            personalMaster = Servers[Servers.Count - 2].URL;
+
+            Console.WriteLine("Begining");
+            Servers.ForEach(s => Console.WriteLine(s.URL));
+            Console.WriteLine("Begining");
 
             foreach (var server in Servers.Take(Servers.Count - 1)) {
                 Console.WriteLine(personalMaster);
                 server.Server =
                     (FaultTolerenceServer) Activator.GetObject(typeof(FaultTolerenceServer), server.URL + "/FTServer");
-
-                Console.WriteLine("THIS IS MY URL");
-
-                Console.WriteLine(myUrl);
+               
 
                 if (server.URL.Equals(personalMaster)) {
                     server.Server.UpdateLifeProofSlave(myUrl);
@@ -110,7 +117,9 @@ namespace OGP_PacMan_Server.Server {
 
         public void UpdateLifeProofSlave(string url) {
             //lock (personalSlave) {
+            Console.WriteLine("PersonalMaster");
             Console.WriteLine(url);
+            Console.WriteLine("PersonalMaster");
             personalSlave =
                 (FaultTolerenceServer) Activator.GetObject(typeof(FaultTolerenceServer), url + "/FTServer");
             lifeProofTimer.Enabled = true;
@@ -169,6 +178,7 @@ namespace OGP_PacMan_Server.Server {
         }
 
         private void CheckLifeProof() {
+            Console.WriteLine("why?");
             var diff = DateTime.Now.TimeOfDay.Subtract(lastProof).TotalMilliseconds;
             Console.WriteLine(diff);
             if (diff > lifeCheckDelay) {
