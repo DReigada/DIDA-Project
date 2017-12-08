@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using ClientServerInterface.Client;
 using ClientServerInterface.PacMan.Client.Game;
 using ClientServerInterface.PacMan.Server;
 
 namespace OGP_PacMan_Server.Game.PacMan {
     public class PacManGame : IGame<Board> {
-        private readonly List<Coin> coins;
 
         private readonly int coinSize = 22;
-
-        private readonly List<ServerGhost> ghosts;
 
         private readonly int ghostSize = 30;
 
@@ -18,9 +16,7 @@ namespace OGP_PacMan_Server.Game.PacMan {
         private readonly int lowerBorder = 320;
 
         private readonly int numberPlayers;
-
-        private readonly List<PacManPlayer> players;
-
+        
         private readonly int playerSize = 25;
 
         private readonly int playerSpeed = 5;
@@ -30,51 +26,43 @@ namespace OGP_PacMan_Server.Game.PacMan {
         private readonly int topBorder = 40;
 
         private readonly List<Wall> walls;
-        private List<ConnectedClient> clients;
-
-        private int roundCounter;
+        
 
         public PacManGame(int numberPlayer) {
             numberPlayers = numberPlayer;
-            coins = new List<Coin>();
-            ghosts = new List<ServerGhost>();
-            players = new List<PacManPlayer>();
             walls = new List<Wall>();
             NewMovements = new List<Movement>();
             StateHistory = new List<Board>();
-            roundCounter = 0;
-            State = null;
             GameEnded = false;
-        }
-
-        public List<Movement> NewMovements { get; }
-
-        public List<Board> StateHistory { get; set; }
-
-        public Board State { get; set; }
-
-        public bool GameEnded { get; private set; }
-
-        public void Start(List<ConnectedClient> clients) {
-            var coinCounter = 1;
-
-            var boardGhosts = new List<Ghost>();
-
-            var boardPlayers = new List<PacManPlayer>();
-
-            this.clients = clients;
 
             //Inicialize Walls
             walls.Add(new Wall(1, new Position(288, 240)));
             walls.Add(new Wall(2, new Position(128, 240)));
             walls.Add(new Wall(3, new Position(248, 40)));
             walls.Add(new Wall(4, new Position(88, 40)));
+        }
+
+        public List<Movement> NewMovements { get; }
+
+        public List<Board> StateHistory { get; set; }
+        
+        public bool GameEnded { get; private set; }
+
+        public void Start(List<ConnectedClient> clients) {
+            var coinCounter = 1;
+           
+            List<ServerGhost> ghosts = new List<ServerGhost>();
+
+            List<PacManPlayer> players = new List<PacManPlayer>();
+
+            List<Coin> coins = new List<Coin>();
+
             //Inicialize Ghosts
             ghosts.Add(new ServerGhost(GhostColor.Red, new Position(180, 73), 1, new Speed(5, 0)));
             ghosts.Add(new ServerGhost(GhostColor.Yellow, new Position(221, 273), 2, new Speed(5, 0)));
             ghosts.Add(new ServerGhost(GhostColor.Pink, new Position(301, 72), 3, new Speed(5, 5)));
             //Inicialize Players
-            for (var i = 1; i <= this.clients.Count; i++)
+            for (var i = 1; i <= numberPlayers; i++)
                 players.Add(new PacManPlayer(i, new Position(8, i * 40), Movement.Direction.Stopped, 0, true));
             //Inicializa 1 Column of coins 
             for (var i = 1; i <= 8; i++) coins.Add(new Coin(coinCounter++, new Position(8, i * 40)));
@@ -94,54 +82,56 @@ namespace OGP_PacMan_Server.Game.PacMan {
             for (var i = 1; i <= 5; i++) coins.Add(new Coin(coinCounter++, new Position(288, i * 40)));
             //Inicializa 9 Column of coins
             for (var i = 1; i <= 8; i++) coins.Add(new Coin(coinCounter++, new Position(328, i * 40)));
-
-            foreach (var ghost in ghosts) boardGhosts.Add(new Ghost(ghost.Color, ghost.Position, ghost.Id));
-
-            State = new Board(roundCounter, boardGhosts, players, coins);
-
-            StateHistory.Add(State);
+            
+            StateHistory.Add(new Board(0, ghosts, players, coins));
         }
 
         public void NextState() {
             var deadCount = 0;
 
-            var boardGhosts = new List<Ghost>();
+            var currentBoard = StateHistory.Last();
 
-            var boardPlayers = new List<PacManPlayer>();
+            var ghosts = GhostMovement(currentBoard.Ghosts);
 
-            GhostMovement();
+            var newPlayers = new List<PacManPlayer>();
 
-            foreach (var player in players) {
+            var coins = new List<Coin>(currentBoard.Coins);
+
+            foreach (var player in currentBoard.Players) {
+                var newPlayer = player.Copy();
+
                 //Check if player is alive
-                if (!player.Alive) continue;
+                if (!newPlayer.Alive) continue;
 
-                PlayerMovement(player);
+                PlayerMovement(newPlayer);
 
-                var coin = CheckCoin(player);
+                var coin = CheckCoin(newPlayer, coins);
 
                 if (coin != null) coins.Remove(coin);
 
-                if (CheckPlayerWallCollision(player)) {
-                    player.Alive = false;
+                if (CheckPlayerWallCollision(newPlayer)) {
+                    newPlayer.Alive = false;
                     deadCount++;
                     continue;
                 }
 
-                if (CheckPlayerGhostCollision(player)) {
+                if (CheckPlayerGhostCollision(newPlayer, ghosts)) {
                     deadCount++;
-                    player.Alive = false;
+                    newPlayer.Alive = false;
                 }
+
+                newPlayers.Add(newPlayer);
             }
 
             if (deadCount == numberPlayers) GameEnded = true;
 
-            foreach (var ghost in ghosts) boardGhosts.Add(new Ghost(ghost.Color, ghost.Position, ghost.Id));
-
             NewMovements.Clear();
+            
+            StateHistory.Add(new Board(currentBoard.RoundID + 1, ghosts, newPlayers, coins));
+        }
 
-            State = new Board(roundCounter++, boardGhosts, players, coins);
-
-            StateHistory.Add(State);
+        public Board State() {
+            return StateHistory.Last();
         }
 
         public void AddMovements(Movement movement) {
@@ -150,19 +140,21 @@ namespace OGP_PacMan_Server.Game.PacMan {
             }
         }
 
-        public void GhostMovement() {
-            foreach (var ghost in ghosts) {
-                ghost.Position.X += ghost.Speed.X;
-                if (CheckGhostWallCollision(ghost) || CheckGhostBorderCollision(ghost)) {
-                    ghost.Position.X -= ghost.Speed.X;
-                    ghost.Speed.X = -ghost.Speed.X;
+        public List<ServerGhost> GhostMovement(List<ServerGhost> ghosts) {
+            return ghosts.Select(ghost => {
+                ServerGhost newGhost = ghost.Copy();
+                newGhost.Position.X += newGhost.Speed.X;
+                if (CheckGhostWallCollision(newGhost) || CheckGhostBorderCollision(newGhost)) {
+                    newGhost.Position.X -= newGhost.Speed.X;
+                    newGhost.Speed.X = -newGhost.Speed.X;
                 }
-                ghost.Position.Y += ghost.Speed.Y;
-                if (CheckGhostWallCollision(ghost) || CheckGhostBorderCollision(ghost)) {
-                    ghost.Position.Y -= ghost.Speed.Y;
-                    ghost.Speed.Y = -ghost.Speed.Y;
+                newGhost.Position.Y += newGhost.Speed.Y;
+                if (CheckGhostWallCollision(newGhost) || CheckGhostBorderCollision(newGhost)) {
+                    newGhost.Position.Y -= newGhost.Speed.Y;
+                    newGhost.Speed.Y = -newGhost.Speed.Y;
                 }
-            }
+                return newGhost;
+            }).ToList();
         }
 
         public void PlayerMovement(PacManPlayer player) {
@@ -215,7 +207,7 @@ namespace OGP_PacMan_Server.Game.PacMan {
             return false;
         }
 
-        public bool CheckPlayerGhostCollision(PacManPlayer player) {
+        public bool CheckPlayerGhostCollision(PacManPlayer player, List<ServerGhost> ghosts) {
             foreach (var ghost in ghosts)
                 if (ghost.Position.X - ghost.Width <= player.Position.X &&
                     player.Position.X - playerSize <= ghost.Position.X &&
@@ -236,7 +228,7 @@ namespace OGP_PacMan_Server.Game.PacMan {
             return false;
         }
 
-        public Coin CheckCoin(PacManPlayer player) {
+        public Coin CheckCoin(PacManPlayer player, List<Coin> coins) {
             foreach (var coin in coins)
                 if (coin.Position.X - coinSize <= player.Position.X &&
                     player.Position.X - playerSize <= coin.Position.X &&

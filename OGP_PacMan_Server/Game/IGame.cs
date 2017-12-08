@@ -6,7 +6,7 @@ namespace OGP_PacMan_Server.Game {
     public interface IGame<TState> {
         bool GameEnded { get; }
 
-        TState State { get; set; }
+        List<TState> StateHistory { get; set; }
 
         void Start(List<ConnectedClient> clients);
 

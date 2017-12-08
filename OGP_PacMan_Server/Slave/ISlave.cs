@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using ClientServerInterface.PacMan.Client.Game;
 using OGP_PacMan_Server.Server;
 
 namespace OGP_PacMan_Server.Slave {
     public interface ISlave<TGameState> {
-        void UpdateState();
+        void UpdateState(Board board);
 
-        void UpdateSlaveList(List<SlaveInfo> servers);
+        void UpdateSlaveList(List<ServerInternalInfo> servers);
 
-        TGameState GetGameState(SlaveInfo slaveInfo);
+        TGameState GetGameState(ServerInternalInfo serverInternalInfo);
+
+        void RemoveServer(ServerInternalInfo serverInternalInfo);
 
         void IAmAlive(TimeSpan time);
 

@@ -2,22 +2,23 @@
 
 namespace OGP_PacMan_Server.Slave {
     [Serializable]
-    public class SlaveInfo {
-        public SlaveInfo(string url, bool isDead) {
+    public class ServerInternalInfo {
+        public ServerInternalInfo(string url, bool isDead) {
             Url = url;
             IsDead = isDead;
         }
 
-        public SlaveInfo(string url, bool isDead, int id) {
+        public ServerInternalInfo(string url, bool isDead, bool isMaster) {
             Url = url;
             IsDead = isDead;
-            Id = id;
+            IsMaster = isMaster;
         }
 
         public string Url { get; }
 
         public bool IsDead { get; set; }
 
-        public int Id { get; set; }
+        public bool IsMaster { get; set; }
+        
     }
 }

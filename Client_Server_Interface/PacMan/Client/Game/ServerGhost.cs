@@ -9,6 +9,10 @@ namespace OGP_PacMan_Server.Game.PacMan {
 
         public int X { get; set; }
         public int Y { get; set; }
+
+        public Speed Copy() {
+            return new Speed(X, Y);
+        }
     }
 
     public class ServerGhost : Ghost {
@@ -21,5 +25,9 @@ namespace OGP_PacMan_Server.Game.PacMan {
         public int Length { get; } = 30;
 
         public Speed Speed { get; }
+
+        public ServerGhost Copy() {
+            return new ServerGhost(Color, Position.Copy(), Id, Speed.Copy() );
+        }
     }
 }

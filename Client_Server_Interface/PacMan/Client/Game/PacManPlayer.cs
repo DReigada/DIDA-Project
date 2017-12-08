@@ -16,5 +16,9 @@ namespace ClientServerInterface.PacMan.Client.Game {
         public int Score { get; set; }
 
         public bool Alive { get; set; }
+
+        public PacManPlayer Copy() {
+            return new PacManPlayer(Id, Position.Copy(), Direction, Score, Alive);
+        }
     }
 }

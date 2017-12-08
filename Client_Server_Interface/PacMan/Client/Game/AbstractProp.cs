@@ -10,6 +10,10 @@ namespace ClientServerInterface.PacMan.Client.Game {
 
         public int X { get; set; }
         public int Y { get; set; }
+
+        public Position Copy() {
+            return new Position(X, Y);
+        }
     }
 
     [Serializable]
