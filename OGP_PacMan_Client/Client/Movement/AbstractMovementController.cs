@@ -12,9 +12,10 @@ namespace OGPPacManClient.Client.Movement {
         private IPacmanServer server;
         private string serverUrl;
 
-        protected AbstractMovementController(IPacmanServer server, int delta, int userId) {
+        protected AbstractMovementController(IPacmanServer server, string serverUrl, int delta, int userId) {
             this.userId = userId;
             this.server = server;
+            this.serverUrl = serverUrl;
             timer = new Timer(delta) {AutoReset = true};
             timer.Elapsed += (sender, args) => NotifyServer();
             isServerDead = true;
