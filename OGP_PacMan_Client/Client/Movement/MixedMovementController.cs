@@ -8,10 +8,11 @@ namespace OGPPacManClient.Client.Movement {
         private AbstractMovementController currentController;
 
 
-        public MixedMovementController(string file, Form1 form, IPacmanServer server, int delta, int userId)
-            : base(server, delta, userId) {
-            fileController = new FileMovementController(file, server, delta, userId);
-            movementController = new MovementController(form, server, delta, userId);
+        public MixedMovementController(string file, Form1 form, IPacmanServer server, string serverUrl, int delta,
+            int userId)
+            : base(server, serverUrl, delta, userId) {
+            fileController = new FileMovementController(file, server, serverUrl,delta, userId);
+            movementController = new MovementController(form, server, serverUrl, delta, userId);
             currentController = fileController;
         }
 

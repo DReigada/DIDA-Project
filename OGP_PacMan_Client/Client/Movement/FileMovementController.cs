@@ -8,7 +8,7 @@ namespace OGPPacManClient.Client.Movement {
         private readonly Regex lineRegex = new Regex(@"\d*,\s?(\S*)");
         private readonly Queue<string> linesQueue;
 
-        public FileMovementController(string file, IPacmanServer server, int delta, int userId) : base(server, delta,
+        public FileMovementController(string file, IPacmanServer server, string serverUrl, int delta, int userId) : base(server, serverUrl, delta,
             userId) {
             var lines = File.ReadAllLines(file);
 

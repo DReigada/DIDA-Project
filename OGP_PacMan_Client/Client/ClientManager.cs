@@ -82,9 +82,9 @@ namespace OGPPacManClient.Client {
 
         private void CreateAndStartMovController(GameProps props) {
             if (movementFile != null)
-                moveController = new MixedMovementController(movementFile, form, server, props.GameSpeed, props.UserId);
+                moveController = new MixedMovementController(movementFile, form, server, serverURL, props.GameSpeed, props.UserId);
             else
-                moveController = new MovementController(form, server, props.GameSpeed, props.UserId);
+                moveController = new MovementController(form, server, serverURL, props.GameSpeed, props.UserId);
 
             moveController.Start();
         }
