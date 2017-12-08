@@ -47,6 +47,8 @@ namespace PuppetMaster.commands {
                 System.Threading.Thread.Sleep(100);
 
                 IProcesses client = (IProcesses) Activator.GetObject(typeof(IProcesses), url);
+
+
                 shell.processes.Add(args[0], client);
                 shell.processesURLs.Add(args[0], args[2]);
             }

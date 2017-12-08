@@ -65,7 +65,7 @@ namespace PuppetMaster {
             return null;
         }
 
-        public async Task doCommandAsync(string input) {
+        public void doCommandAsync(string input) {
             string[] args = input.Split(' ');
             string cmd = args[0];
 
@@ -75,9 +75,7 @@ namespace PuppetMaster {
             }
             else {
                 string[] cmdArgs = args.Skip(1).ToArray(); //only command args 
-
                 //await Task.Delay(5000);
-                System.Threading.Thread.Sleep(300);
                 new Thread(() => command.Execute(cmdArgs)).Start();
             }
         }
@@ -97,6 +95,7 @@ namespace PuppetMaster {
                 if (string.Equals(cmd, "wait", StringComparison.OrdinalIgnoreCase)){
                     doWait(cmdArgs);
                 }
+
                 doCommandAsync(input);
             }
         }
