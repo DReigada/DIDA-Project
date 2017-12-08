@@ -18,16 +18,11 @@ namespace PuppetMaster {
 
         private TextReader stdin { get; set; }
         public bool readingFile { get; set; }
-
-        public static readonly string PCS_URL = "tcp://localhost:11000/PCS";
-
+        
         public string prompt = "[PuppetMaster] >>> ";
-        //public Dictionary<string, List<IProcesses>> servers = new Dictionary<string, List<IProcesses>>();
+
         public Dictionary<string, String> processesURLs = new Dictionary<string, String>();
         public Dictionary<string, IProcesses> processes = new Dictionary<string, IProcesses>();
-
-        //Dictionary<string, IProcessCreationService> pcs_list = new Dictionary<string, IProcessCreationService>();
-        //private Dictionary<string, TcpChannel> channelList = new Dictionary<string, TcpChannel>();
 
         public IProcessCreationService pcs = null;
 
@@ -84,7 +79,6 @@ namespace PuppetMaster {
                 //await Task.Delay(5000);
                 System.Threading.Thread.Sleep(300);
                 new Thread(() => command.Execute(cmdArgs)).Start();
-                //command.Execute(cmdArgs);
             }
         }
 

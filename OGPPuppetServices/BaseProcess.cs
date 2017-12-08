@@ -37,7 +37,6 @@ namespace OGPServices {
 
         public void InjectDelay(string url_dest) {
             lock (delayedURLs) {
-                Console.WriteLine("OLOLJIUHJGHJFGHFHGFHVHVHVHJB");
                 delayedURLs.Add(url_dest);
             }
         }

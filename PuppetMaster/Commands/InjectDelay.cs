@@ -31,12 +31,12 @@ namespace PuppetMaster.commands {
             }
 
             try{
-                shell.processesURLs.TryGetValue(pid_src, out var processURL);
+                shell.processesURLs.TryGetValue(pid_dest, out var processURL);
                 String ip = processURL.Split('/')[2].Split(':')[0];
                 String port = processURL.Split(':')[2].Split('/')[0];
-                string url = ip + ":" + port;
+                string url_dest = ip + ":" + port;
 
-                shell.processes[pid_src].InjectDelay(url);
+                shell.processes[pid_src].InjectDelay(url_dest);
             }
             catch (Exception e){
                 Console.WriteLine("[InjectDelay] ERROR: {0}.", e.Message);
