@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting;
 using System.Threading;
 
 namespace OGPServices {
@@ -9,6 +10,8 @@ namespace OGPServices {
         private bool isFrozen;
 
         protected BaseProcess() {
+            RemotingServices.Marshal(this, "Puppet");
+
             ListClientsInfo = () => new List<(int Id, string URL, bool isDead)>();
             ListServersInfo = () => new List<(int Id, string URL, bool isDead)>();
         }
