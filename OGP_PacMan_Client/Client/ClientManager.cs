@@ -48,6 +48,7 @@ namespace OGPPacManClient.Client {
             server = GetServerConnection();
 
             var clientInfo = new ClientInfo($"tcp://{clientIP}:{clientPort}");
+            ClientPuppet.Instance.DoDelay(serverURL);
             var gameProps = server.RegisterClient(clientInfo);
             InitializeControllers(gameProps);
 
@@ -110,7 +111,7 @@ namespace OGPPacManClient.Client {
             Console.WriteLine(url);
             serverURL = url;
             server = (IPacmanServer) Activator.GetObject(typeof(IPacmanServer), url + "/PacManServer");
-            moveController.setNewServer(server);
+            moveController.setNewServer(server, serverURL);
         }
     }
 }

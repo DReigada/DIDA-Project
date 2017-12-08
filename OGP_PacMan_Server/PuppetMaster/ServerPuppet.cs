@@ -13,10 +13,5 @@ namespace OGP_PacMan_Server.PuppetMaster {
         public override void LocalStatus(int round_id) {
             throw new NotImplementedException();
         }
-
-        public override void InjectDelay(string pid_dest) {
-            throw new NotImplementedException();
-        }
-
     }
 }

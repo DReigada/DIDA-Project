@@ -6,12 +6,18 @@ using System.Threading;
 
 namespace OGPServices {
     public abstract class BaseProcess : MarshalByRefObject, IProcesses {
+        private static readonly int DELAY_TIME_MS = 300;
+
         private readonly object freezeLock = new object();
         private bool isFrozen;
+
+        private ISet<String> delayedURLs;
 
         protected BaseProcess() {
             RemotingServices.Marshal(this, "Puppet");
             Console.WriteLine("Initilized BaseProcess");
+
+            delayedURLs = new HashSet<string>();
 
             ListClientsInfo = () => new List<(int Id, string URL, bool isDead)>();
             ListServersInfo = () => new List<(int Id, string URL, bool isDead)>();
@@ -29,7 +35,11 @@ namespace OGPServices {
 
         public abstract void LocalStatus(int round_id);
 
-        public abstract void InjectDelay(string pid_dest);
+        public void InjectDelay(string url_dest) {
+            lock (delayedURLs) {
+                delayedURLs.Add(url_dest);
+            }
+        }
 
         public void Crash() {
             Environment.Exit(1);
@@ -51,6 +61,12 @@ namespace OGPServices {
         public void Wait() {
             lock (freezeLock) {
                 while (isFrozen) Monitor.Wait(freezeLock);
+            }
+        }
+
+        public void DoDelay(String destURL) {
+            if (delayedURLs.Contains(destURL)) {
+                Thread.Sleep(DELAY_TIME_MS);
             }
         }
 

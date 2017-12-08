@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using System.Timers;
 using ClientServerInterface.PacMan.Server;
+using OGPPacManClient.PuppetMaster;
 
 namespace OGPPacManClient.Client.Movement {
     public abstract class AbstractMovementController {
@@ -9,6 +10,7 @@ namespace OGPPacManClient.Client.Movement {
         private readonly int userId;
         private bool isServerDead;
         private IPacmanServer server;
+        private string serverUrl;
 
         protected AbstractMovementController(IPacmanServer server, int delta, int userId) {
             this.userId = userId;
@@ -33,6 +35,7 @@ namespace OGPPacManClient.Client.Movement {
                 var dir = GetDirection();
                 if (dir != ClientServerInterface.PacMan.Server.Movement.Direction.Stopped) {
                     var mov = new ClientServerInterface.PacMan.Server.Movement(userId, dir);
+                    ClientPuppet.Instance.DoDelay(serverUrl);
                     server.SendAction(mov);
                 }
                 isServerDead = false;
@@ -43,9 +46,10 @@ namespace OGPPacManClient.Client.Movement {
             }
         }
 
-        public void setNewServer(IPacmanServer server) {
+        public void setNewServer(IPacmanServer server, string serverUrl) {
             Console.WriteLine("NEW SERVER");
             this.server = server;
+            this.serverUrl = serverUrl;
             isServerDead = false;
         }
 
