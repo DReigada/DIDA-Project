@@ -96,6 +96,7 @@ namespace OGP_PacMan_Server.Server {
 
 
         public void AddClient(ClientInfo client) {
+            ServerPuppet.Instance.Wait();
             if (IsMaster)
                 new Thread(() => {
                     lock (Servers) {
@@ -118,12 +119,13 @@ namespace OGP_PacMan_Server.Server {
         }
 
         public void UpdateLifeProofSlave(string url) {
+            ServerPuppet.Instance.Wait();
             personalSlave = Servers.Find(server => server.URL.Equals(url));
 
             if (lifeProofTimer.Enabled == false) lifeProofTimer.Enabled = true;
         }
 
-        public void RemoveServer(string url) {
+        public void LocalRemoveServer(string url) {
             lock (Servers) {
                 Servers.RemoveAll(server => server.URL.Equals(url));
                 if (Servers[0].URL.Equals(myUrl) && !IsMaster) {
@@ -147,7 +149,13 @@ namespace OGP_PacMan_Server.Server {
             }
         }
 
+        public void RemoveServer(string url) {
+            ServerPuppet.Instance.Wait();
+            LocalRemoveServer(url);
+        }
+
         public List<ServerWithInfo<FaultTolerenceServer>> RegisterNewSlave(ServerInternalInfo serverInternalInfo) {
+            ServerPuppet.Instance.Wait();
             lock (Servers) {
                 var newSlave = (FaultTolerenceServer) Activator.GetObject(typeof(FaultTolerenceServer),
                     serverInternalInfo.Url + "/FTServer");
@@ -175,6 +183,7 @@ namespace OGP_PacMan_Server.Server {
         }
 
         public void AddSlave(ServerInternalInfo serverInternalInfo) {
+            ServerPuppet.Instance.Wait();
             lock (Servers) {
                 var newSlave = (FaultTolerenceServer) Activator.GetObject(typeof(FaultTolerenceServer),
                     serverInternalInfo.Url + "/FTServer");
@@ -190,7 +199,7 @@ namespace OGP_PacMan_Server.Server {
                 lifeCheckTimer.Enabled = false;
                 var deadServer = Servers.Find(server => personalMaster.Equals(server.URL));
                 TryToKill(deadServer);
-                RemoveServer(deadServer.URL);
+                LocalRemoveServer(deadServer.URL);
                 new Thread(() => {
                     lock (Servers) {
                         Servers.AsParallel().ForAll(slave => {
@@ -222,6 +231,7 @@ namespace OGP_PacMan_Server.Server {
         }
 
         public void IAmAlive() {
+            ServerPuppet.Instance.Wait();
             lastProof = DateTime.Now.TimeOfDay;
             lifeCheckTimer.Enabled = true;
         }
@@ -239,6 +249,8 @@ namespace OGP_PacMan_Server.Server {
         }
 
         public void Kill() {
+            ServerPuppet.Instance.Wait();
+
             Environment.Exit(1);
         }
     }
