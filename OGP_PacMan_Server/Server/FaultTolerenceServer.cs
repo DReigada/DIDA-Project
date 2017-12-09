@@ -14,7 +14,7 @@ namespace OGP_PacMan_Server.Server {
         private readonly Timer lifeCheckTimer;
         private readonly Timer lifeProofTimer;
         private readonly string myUrl;
-        private readonly string personalMaster;
+        private string personalMaster;
         private readonly Func<ClientInfo, GameProps> registerClient;
         private readonly Action setMaster;
         private readonly Action<List<ServerWithInfo<FaultTolerenceServer>>> updateServers;
@@ -60,30 +60,20 @@ namespace OGP_PacMan_Server.Server {
             lifeCheckTimer.Elapsed += (a, b) => CheckLifeProof();
             lifeCheckTimer.Interval = gameSpeed * 5;
             
-            Console.WriteLine("Master");
-            Console.WriteLine(masterUrl);
-            Console.WriteLine("Master");
 
             var master = (FaultTolerenceServer) Activator.GetObject(typeof(FaultTolerenceServer),
                 masterUrl + "/FTServer");
 
             Servers = master.RegisterNewSlave(new ServerInternalInfo(myUrl, false, false));
-
-            Console.WriteLine("PersonalMaster");
-            Console.WriteLine(Servers[Servers.Count - 2].URL);
-            Console.WriteLine("PersonalMaster");
+            
 
             personalMaster = Servers[Servers.Count - 2].URL;
-
-            Console.WriteLine("Begining");
-            Servers.ForEach(s => Console.WriteLine(s.URL));
-            Console.WriteLine("Begining");
+            
 
             foreach (var server in Servers.Take(Servers.Count - 1)) {
-                Console.WriteLine(personalMaster);
                 server.Server =
                     (FaultTolerenceServer) Activator.GetObject(typeof(FaultTolerenceServer), server.URL + "/FTServer");
-               
+
 
                 if (server.URL.Equals(personalMaster)) {
                     server.Server.UpdateLifeProofSlave(myUrl);
@@ -117,9 +107,6 @@ namespace OGP_PacMan_Server.Server {
 
         public void UpdateLifeProofSlave(string url) {
             //lock (personalSlave) {
-            Console.WriteLine("PersonalMaster");
-            Console.WriteLine(url);
-            Console.WriteLine("PersonalMaster");
             personalSlave =
                 (FaultTolerenceServer) Activator.GetObject(typeof(FaultTolerenceServer), url + "/FTServer");
             lifeProofTimer.Enabled = true;
@@ -129,16 +116,18 @@ namespace OGP_PacMan_Server.Server {
         public void RemoveServer(string url) {
             lock (Servers) {
                 Servers.RemoveAll(server => server.URL.Equals(url));
-                Console.WriteLine("URLS");
-                Servers.ForEach(s => Console.WriteLine(s.URL));
-                Console.WriteLine("");
-                Console.WriteLine(url);
-                if (Servers[0].URL.Equals(myUrl)) {
+                if (Servers[0].URL.Equals(myUrl) && !IsMaster) {
                     IsMaster = true;
-                    Console.WriteLine(IsMaster);
                     lifeCheckTimer.Enabled = false;
                     setMaster();
                     updateServers(Servers);
+                } 
+                else if (!IsMaster && personalMaster.Equals(url)) {
+                    int myIndex = Servers.FindIndex(server => server.URL.Equals(myUrl));
+                    var newMaster = Servers[myIndex - 1];
+                    personalMaster = newMaster.URL;
+                    newMaster.Server.UpdateLifeProofSlave(myUrl);
+                    lifeCheckTimer.Enabled = true;
                 }
             }
         }
@@ -178,10 +167,9 @@ namespace OGP_PacMan_Server.Server {
         }
 
         private void CheckLifeProof() {
-            Console.WriteLine("why?");
             var diff = DateTime.Now.TimeOfDay.Subtract(lastProof).TotalMilliseconds;
-            Console.WriteLine(diff);
             if (diff > lifeCheckDelay) {
+                lifeCheckTimer.Enabled = false;
                 var deadServer = Servers.Find(server => personalMaster.Equals(server.URL));
                 TryToKill(deadServer.Server);
                 RemoveServer(deadServer.URL);
@@ -202,7 +190,13 @@ namespace OGP_PacMan_Server.Server {
         }
 
         public void SendLifeProof() {
-            personalSlave?.IAmAlive();
+            new Thread(() => {
+                try {
+                    personalSlave?.IAmAlive();
+                }
+                catch (SocketException) {
+                }
+            }).Start();
         }
 
         public void IAmAlive() {
