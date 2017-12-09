@@ -80,7 +80,7 @@ namespace OGP_PacMan_Server.Server {
 
                 if (server.URL.Equals(personalMaster)) {
                     server.Server.UpdateLifeProofSlave(myUrl);
-                    lifeCheckTimer.Enabled = true;
+                    //lifeCheckTimer.Enabled = true;
                 }
             }
         }
@@ -134,7 +134,6 @@ namespace OGP_PacMan_Server.Server {
                     var newMaster = Servers[myIndex - 1];
                     personalMaster = newMaster.URL;
                     newMaster.Server.UpdateLifeProofSlave(myUrl);
-                    lifeCheckTimer.Enabled = true;
                 }
                 else if (IsMaster) {
                     removePacManServer(url);
@@ -212,6 +211,7 @@ namespace OGP_PacMan_Server.Server {
 
         public void IAmAlive() {
             lastProof = DateTime.Now.TimeOfDay;
+            lifeCheckTimer.Enabled = true;
         }
 
         private void TryToKill(FaultTolerenceServer server) {
