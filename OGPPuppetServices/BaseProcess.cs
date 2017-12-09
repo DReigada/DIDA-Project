@@ -29,10 +29,11 @@ namespace OGPServices {
         public Func<int, string> GetRoundInfo { get; set; }
 
         public void GlobalStatus() {
-            var clients = string.Join("\n", ListClientsInfo().Select(createString));
-            var servers = string.Join("\n", ListServersInfo().Select(createString));
+            var clients = string.Join(Environment.NewLine, ListClientsInfo().Select(createString));
+            var servers = string.Join(Environment.NewLine, ListServersInfo().Select(createString));
 
-            Console.WriteLine($"GlobalStatus\nClients:\n{clients}\n Servers:\n{servers}");
+            Console.WriteLine(
+                $"GlobalStatus{Environment.NewLine}Clients:{Environment.NewLine}{clients}{Environment.NewLine} Servers:{Environment.NewLine}{servers}");
         }
 
         public string LocalStatus(int round_id) {
