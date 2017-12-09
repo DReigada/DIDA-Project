@@ -124,6 +124,9 @@ namespace OGP_PacMan_Server.Server {
 
         private void InitializePuppet() {
             ServerPuppet.Instance.GetRoundInfo = i => game.StateHistory.Find(b => b.RoundID == i).PrettyString();
+            ServerPuppet.Instance.ListClientsInfo = () => pacManClients.Select(c => (c.Id, c.URL, c.IsDead)).ToList();
+            ServerPuppet.Instance.ListServersInfo = () => tolerenceServer.Servers.Select(s => (0, s.URL, s.IsDead)).ToList();
+
         }
 
         public void UpdateClientBoard(Board board) {
