@@ -48,6 +48,7 @@ namespace OGPPacManClient.Client {
             server = GetServerConnection();
 
             var clientInfo = new ClientInfo($"tcp://{clientIP}:{clientPort}");
+            ClientPuppet.Instance.DoDelay(serverURL);
             var gameProps = server.RegisterClient(clientInfo);
             InitializeControllers(gameProps);
 
@@ -57,6 +58,7 @@ namespace OGPPacManClient.Client {
         public void InitializePuppet() {
             ClientPuppet.Instance.ListClientsInfo = chatController.ListClientsInfo;
             ClientPuppet.Instance.ListServersInfo = GetServerInfo;
+            ClientPuppet.Instance.GetRoundInfo = i => client.GetRoundBoard(i).PrettyString();
         }
 
         public IList<(int, string, bool)> GetServerInfo() {
@@ -81,9 +83,10 @@ namespace OGPPacManClient.Client {
 
         private void CreateAndStartMovController(GameProps props) {
             if (movementFile != null)
-                moveController = new MixedMovementController(movementFile, form, server, props.GameSpeed, props.UserId);
+                moveController = new MixedMovementController(movementFile, form, server, serverURL, props.GameSpeed,
+                    props.UserId);
             else
-                moveController = new MovementController(form, server, props.GameSpeed, props.UserId);
+                moveController = new MovementController(form, server, serverURL, props.GameSpeed, props.UserId);
 
             moveController.Start();
         }
@@ -110,7 +113,7 @@ namespace OGPPacManClient.Client {
             Console.WriteLine(url);
             serverURL = url;
             server = (IPacmanServer) Activator.GetObject(typeof(IPacmanServer), url + "/PacManServer");
-            moveController.setNewServer(server);
+            moveController.setNewServer(server, serverURL);
         }
     }
 }

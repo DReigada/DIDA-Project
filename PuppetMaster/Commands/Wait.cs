@@ -18,7 +18,7 @@ namespace PuppetMaster.commands {
             }
             int x_ms = int.Parse(args[0]);
             try{
-                Console.WriteLine("Waiting... {0} ms", x_ms);
+                //Console.WriteLine("Waiting... {0} ms", x_ms);
                 System.Threading.Thread.Sleep(x_ms);
             }
             catch (Exception e){

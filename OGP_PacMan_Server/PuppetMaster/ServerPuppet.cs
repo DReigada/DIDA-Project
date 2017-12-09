@@ -9,14 +9,5 @@ namespace OGP_PacMan_Server.PuppetMaster {
         }
 
         public static ServerPuppet Instance => _instance ?? (_instance = new ServerPuppet());
-
-        public override void LocalStatus(int round_id) {
-            throw new NotImplementedException();
-        }
-
-        public override void InjectDelay(string pid_dest) {
-            throw new NotImplementedException();
-        }
-
     }
 }

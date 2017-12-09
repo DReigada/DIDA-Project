@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Channels.Tcp;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using OGPServices;
 using OGP_PacMan_Server.Server;
@@ -59,7 +61,7 @@ namespace ProcessCreationService {
         }
 
     
-        public void createClientWithFilename(string pid, string clientURL, string filename)
+        public void createClient(string pid, string clientURL, string filename)
         {
             String clientIp = clientURL.Split('/')[2].Split(':')[0];
             String clientPort = clientURL.Split(':')[2].Split('/')[0];

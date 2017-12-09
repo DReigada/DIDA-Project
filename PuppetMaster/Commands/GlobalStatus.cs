@@ -16,9 +16,9 @@ namespace PuppetMaster.commands {
                 printErrorMsg();
                 return;
             }
-            foreach (KeyValuePair<string, IProcesses> entry in shell.processes)  {
+            foreach (KeyValuePair<string , IProcesses> entry in shell.processes){
                 try{
-                    //call globalstatus                    
+                    entry.Value.GlobalStatus();
                 }
                 catch (Exception e){
                     Console.WriteLine("[GlobalStatus] ERROR: {0}.", e.Message);

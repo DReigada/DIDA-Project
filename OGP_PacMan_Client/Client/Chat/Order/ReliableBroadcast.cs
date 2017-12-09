@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
+using OGPPacManClient.PuppetMaster;
 
 namespace OGPPacManClient.Client.Chat.Order {
     internal class ReliableBroadcast<M> : AbstractBroadcast<M, ReliableBroadcast<M>> {
@@ -44,7 +45,9 @@ namespace OGPPacManClient.Client.Chat.Order {
 
         private void DoSendMessage(WrappedMessage<M> wrappedMessage) {
             new Thread(() =>
-                OtherClients.AsParallel().ForAll(c => sendMessageToClient(c.Value, wrappedMessage))
+                OtherClients.AsParallel().ForAll(c => {
+                    sendMessageToClient(c.Value, wrappedMessage);
+                })
             ).Start();
         }
 
@@ -52,6 +55,7 @@ namespace OGPPacManClient.Client.Chat.Order {
             ClientWithInfo<ReliableBroadcast<M>> client,
             WrappedMessage<M> wrappedMessage) {
             try {
+                ClientPuppet.Instance.DoDelay(client.URL);
                 client.Client.ReceiveMessage(wrappedMessage);
                 client.IsDead = false;
             }

@@ -1,18 +1,18 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 using OGPPacManClient.Client;
 
 namespace pacman {
-    internal static class Program {
+    internal static class Program{
         /// <summary>
         ///     The main entry point for the application.
         /// </summary>
-        private static void Main(string[] args) {
+        private static void Main(string[] args){
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-
-            if (args.Length < 3) {
+            if (args.Length < 3){
                 Console.WriteLine("Invalid number of arguments");
                 Environment.Exit(1);
             }

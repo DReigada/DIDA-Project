@@ -47,10 +47,10 @@
     <Compile Include="Client\ConnectedClient.cs" />
     <Compile Include="Client\IClient.cs" />
     <Compile Include="PacMan\Client\Game\Coin.cs" />
-    <Compile Include="PacMan\Client\Game\Ghost.cs" />
     <Compile Include="PacMan\Client\Game\PacManPlayer.cs" />
     <Compile Include="PacMan\Client\Game\AbstractProp.cs" />
     <Compile Include="PacMan\Client\Game\ServerGhost.cs" />
+    <Compile Include="PacMan\Client\Game\Ghost.cs" />
     <Compile Include="PacMan\Server\GameProps.cs" />
     <Compile Include="PacMan\Client\IPacManClient.cs" />
     <Compile Include="PacMan\Server\IPacManServer.cs" />

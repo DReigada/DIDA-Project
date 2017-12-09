@@ -24,7 +24,8 @@ namespace PuppetMaster.commands {
                 return;
             }
             try{
-                shell.processes[pid].LocalStatus(round_id);
+                var status = shell.processes[pid].LocalStatus(round_id);
+                Console.WriteLine(status);
             }
             catch (Exception e){
                 Console.WriteLine("[LocalState] ERROR: {0}.", e.Message);

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Net.Sockets;
-using System.Timers;
+using System.Threading;
 using ClientServerInterface.PacMan.Server;
+using OGPPacManClient.PuppetMaster;
+using Timer = System.Timers.Timer;
 
 namespace OGPPacManClient.Client.Movement {
     public abstract class AbstractMovementController {
@@ -9,10 +11,12 @@ namespace OGPPacManClient.Client.Movement {
         private readonly int userId;
         private bool isServerDead;
         private IPacmanServer server;
+        private string serverUrl;
 
-        protected AbstractMovementController(IPacmanServer server, int delta, int userId) {
+        protected AbstractMovementController(IPacmanServer server, string serverUrl, int delta, int userId) {
             this.userId = userId;
             this.server = server;
+            this.serverUrl = serverUrl;
             timer = new Timer(delta) {AutoReset = true};
             timer.Elapsed += (sender, args) => NotifyServer();
             isServerDead = true;
@@ -29,23 +33,27 @@ namespace OGPPacManClient.Client.Movement {
         }
 
         public void NotifyServer() {
-            try {
-                var dir = GetDirection();
-                if (dir != ClientServerInterface.PacMan.Server.Movement.Direction.Stopped) {
-                    var mov = new ClientServerInterface.PacMan.Server.Movement(userId, dir);
-                    server.SendAction(mov);
+            new Thread(() => {
+                try {
+                    var dir = GetDirection();
+                    if (dir != ClientServerInterface.PacMan.Server.Movement.Direction.Stopped) {
+                        var mov = new ClientServerInterface.PacMan.Server.Movement(userId, dir);
+                        ClientPuppet.Instance.DoDelay(serverUrl);
+                        server.SendAction(mov);
+                    }
+                    isServerDead = false;
                 }
-                isServerDead = false;
-            }
-            catch (SocketException) {
-                isServerDead = true;
-                Console.WriteLine("Server is dead");
-            }
+                catch (SocketException) {
+                    isServerDead = true;
+                    Console.WriteLine("Server is dead");
+                }
+            }).Start();
         }
 
-        public void setNewServer(IPacmanServer server) {
+        public void setNewServer(IPacmanServer server, string serverUrl) {
             Console.WriteLine("NEW SERVER");
             this.server = server;
+            this.serverUrl = serverUrl;
             isServerDead = false;
         }
 

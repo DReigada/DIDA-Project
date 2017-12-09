@@ -34,6 +34,8 @@ DONE - Causal order on the clients' chat with vector clocks - Daniel
 - Finish implementing ClientPuppet - Daniel
 - Finish implementing ServerPuppet - Diogo
 
+- Server replication Chain
+
 
 FIX:
 ---
@@ -43,6 +45,6 @@ DONE - Input file accepting keys after reading input file
 DONE - Server recieve in args the ip
 DONE - Client recieve in args the ip
 DONE - Remove coins concurrent problem
-- Slave should try to kill master when it becomes the new master
-- Try to improve master timeout
+Done - Slave should try to kill master when it becomes the new master
+Done - Try to improve master timeout
 - Add roundID to server

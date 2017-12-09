@@ -14,7 +14,7 @@ namespace PuppetMaster
 {
     class Program {
 
-        public static readonly int Port = 11001;
+        public static readonly int Port = 10000;
         public static readonly string Name = "PuppetMaster";
         public static readonly string CONFIG_FOLDER_PATH = @"..\..\Resources\Config\";
         public static readonly string CONFIG_FILE_NAME = @"dad-ogp.config";
