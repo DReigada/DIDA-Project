@@ -43,6 +43,7 @@ namespace OGPServices {
         public void InjectDelay(string url_dest) {
             lock (delayedURLs) {
                 delayedURLs.Add(url_dest);
+                delayedURLs.Add("tcp://" + url_dest);
             }
         }
 

@@ -113,6 +113,7 @@ namespace OGP_PacMan_Server.Server {
                 new Thread(() => {
                     pacmanServers.AsParallel().ForAll(server => {
                         try {
+                            ServerPuppet.Instance.DoDelay(server.URL);
                             server.Server.UpdateState(board);
                         }
                         catch (SocketException) {
@@ -125,14 +126,15 @@ namespace OGP_PacMan_Server.Server {
         private void InitializePuppet() {
             ServerPuppet.Instance.GetRoundInfo = i => game.StateHistory.Find(b => b.RoundID == i).PrettyString();
             ServerPuppet.Instance.ListClientsInfo = () => pacManClients.Select(c => (c.Id, c.URL, c.IsDead)).ToList();
-            ServerPuppet.Instance.ListServersInfo = () => tolerenceServer.Servers.Select(s => (0, s.URL, s.IsDead)).ToList();
-
+            ServerPuppet.Instance.ListServersInfo =
+                () => tolerenceServer.Servers.Select(s => (0, s.URL, s.IsDead)).ToList();
         }
 
         public void UpdateClientBoard(Board board) {
             new Thread(() => {
                 pacManClients.AsParallel().ForAll(pacManClient => {
                     try {
+                        ServerPuppet.Instance.DoDelay(pacManClient.URL);
                         pacManClient.Client.UpdateState(board);
                         pacManClient.IsDead = false;
                     }
@@ -159,7 +161,10 @@ namespace OGP_PacMan_Server.Server {
         }
 
         private void updateClientsServer() {
-            foreach (var client in pacManClients) client.Client.UpdateServer(new ServerInfo(myUrl));
+            foreach (var client in pacManClients) {
+                ServerPuppet.Instance.DoDelay(client.URL);
+                client.Client.UpdateServer(new ServerInfo(myUrl));
+            }
             gameTimer.Enabled = true;
         }
 
@@ -177,12 +182,14 @@ namespace OGP_PacMan_Server.Server {
         }
 
         public void UpdateConnectedClients() {
-            ServerPuppet.Instance.Wait();
             lock (pacManClients) {
                 var connectedClients = pacManClients
                     .Select(pacManClient => new ConnectedClient(pacManClient.Id, pacManClient.URL)).ToList();
+
                 foreach (var pacManClient in pacManClients)
                     try {
+                        ServerPuppet.Instance.DoDelay(pacManClient.URL);
+
                         pacManClient.Client.UpdateConnectedClients(connectedClients);
                         pacManClient.IsDead = false;
                     }

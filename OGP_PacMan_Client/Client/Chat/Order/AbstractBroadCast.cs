@@ -57,7 +57,7 @@ namespace OGPPacManClient.Client.Chat.Order {
                 clients.ForEach(client => {
                     if (client.Id != selfId && !OtherClients.ContainsKey(client.Id)) {
                         var newClient = ConnectToClient(client.URL);
-                        var newClientWithInfo = new ClientWithInfo<Impl>(newClient, client.URL.Substring(6), client.Id);
+                        var newClientWithInfo = new ClientWithInfo<Impl>(newClient, client.URL, client.Id);
                         OtherClients.Add(client.Id, newClientWithInfo);
                     }
                 });
