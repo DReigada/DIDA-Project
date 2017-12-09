@@ -25,8 +25,7 @@ namespace OGPPacManClient.Client {
 
         public void UpdateState(Board board) {
             ClientPuppet.Instance.Wait();
-            //boards.Add(board.RoundId, board); TODO change this
-            boards[1] = board;
+            boards.Add(board.RoundID, board);
             controller.Update(board);
         }
 

@@ -33,18 +33,6 @@ namespace OGP_PacMan_Server.Server {
         private readonly FaultTolerenceServer tolerenceServer;
 
 
-        //we should probably remove this one
-        public PacManServer(int gameSpeed, int numberPlayers) {
-            this.gameSpeed = gameSpeed;
-            this.numberPlayers = numberPlayers;
-            pacManClients = new List<ClientWithInfo<IPacManClient>>();
-            game = new PacManGame(numberPlayers);
-
-            gameTimer = new Timer();
-            gameTimer.Elapsed += TimeEvent;
-            gameTimer.Interval = gameSpeed;
-        }
-
         public PacManServer(int gameSpeed, int numberPlayers, string url) {
             this.gameSpeed = gameSpeed;
             this.numberPlayers = numberPlayers;
@@ -59,6 +47,8 @@ namespace OGP_PacMan_Server.Server {
             gameTimer = new Timer();
             gameTimer.Elapsed += TimeEvent;
             gameTimer.Interval = gameSpeed;
+
+            InitializePuppet();
         }
 
         public PacManServer(int gameSpeed, int numberPlayers, string url, string masterUrl) {
@@ -76,6 +66,8 @@ namespace OGP_PacMan_Server.Server {
             gameTimer = new Timer();
             gameTimer.Elapsed += TimeEvent;
             gameTimer.Interval = gameSpeed;
+
+            InitializePuppet();
         }
 
         public GameProps RegisterClient(ClientInfo client) {
