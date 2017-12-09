@@ -31,7 +31,7 @@ namespace OGP_PacMan_Server.Server {
         private readonly List<ServerWithInfo<IPacmanServer>> pacmanServers;
 
         private readonly FaultTolerenceServer tolerenceServer;
-        
+
 
         //we should probably remove this one
         public PacManServer(int gameSpeed, int numberPlayers) {
@@ -52,9 +52,10 @@ namespace OGP_PacMan_Server.Server {
             pacManClients = new List<ClientWithInfo<IPacManClient>>();
             game = new PacManGame(numberPlayers);
             pacmanServers = new List<ServerWithInfo<IPacmanServer>>();
-            tolerenceServer = new FaultTolerenceServer(url, this.gameSpeed, 5, RegisterClient, UpdatePacManServers, updateClientsServer, RemovePacManServers);
+            tolerenceServer = new FaultTolerenceServer(url, this.gameSpeed, 5, RegisterClient, UpdatePacManServers,
+                updateClientsServer, RemovePacManServers);
             RemotingServices.Marshal(tolerenceServer, "FTServer", typeof(FaultTolerenceServer));
-            
+
             gameTimer = new Timer();
             gameTimer.Elapsed += TimeEvent;
             gameTimer.Interval = gameSpeed;
@@ -68,7 +69,8 @@ namespace OGP_PacMan_Server.Server {
             game = new PacManGame(numberPlayers);
             pacmanServers = new List<ServerWithInfo<IPacmanServer>>();
             tolerenceServer =
-                new FaultTolerenceServer(url, this.gameSpeed, 5, RegisterClient, masterUrl, UpdatePacManServers, updateClientsServer, RemovePacManServers);
+                new FaultTolerenceServer(url, this.gameSpeed, 5, RegisterClient, masterUrl, UpdatePacManServers,
+                    updateClientsServer, RemovePacManServers);
             RemotingServices.Marshal(tolerenceServer, "FTServer", typeof(FaultTolerenceServer));
 
             gameTimer = new Timer();
@@ -126,21 +128,21 @@ namespace OGP_PacMan_Server.Server {
                     });
                 }).Start();
             else game.StateHistory.Add(board);
+        }
 
+        private void InitializePuppet() {
+            ServerPuppet.Instance.GetRoundInfo = i => game.StateHistory.Find(b => b.RoundID == i).PrettyString();
         }
 
         public void UpdateClientBoard(Board board) {
             new Thread(() => {
                 pacManClients.AsParallel().ForAll(pacManClient => {
-                    try
-                    {
+                    try {
                         pacManClient.Client.UpdateState(board);
                         pacManClient.IsDead = false;
                     }
-                    catch (SocketException)
-                    {
-                        if (!pacManClient.IsDead)
-                        {
+                    catch (SocketException) {
+                        if (!pacManClient.IsDead) {
                             Console.WriteLine($"Client {pacManClient.Id} is dead");
                             pacManClient.IsDead = true;
                         }
@@ -157,14 +159,12 @@ namespace OGP_PacMan_Server.Server {
             }
         }
 
-        private void RemovePacManServers(String url) {
-            pacmanServers.RemoveAll( server => server.URL.Equals(url));           
+        private void RemovePacManServers(string url) {
+            pacmanServers.RemoveAll(server => server.URL.Equals(url));
         }
 
         private void updateClientsServer() {
-            foreach (var client in pacManClients) {
-                client.Client.UpdateServer(new ServerInfo(myUrl));
-            }
+            foreach (var client in pacManClients) client.Client.UpdateServer(new ServerInfo(myUrl));
             gameTimer.Enabled = true;
         }
 
@@ -175,7 +175,7 @@ namespace OGP_PacMan_Server.Server {
                 Console.WriteLine("GAME OVER!!!!");
             }
             var board = game.State();
-            
+
             UpdateState(board);
 
             UpdateClientBoard(board);

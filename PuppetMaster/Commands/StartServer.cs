@@ -18,11 +18,17 @@ namespace PuppetMaster.commands {
                     Console.WriteLine("[StartServer] There is already a process with this id: \"{0}\"", args[0]);
                     return;
                 }
-                shell.connectPCS(args[1]).createServer(args[0], args[2], args[3], args[4]);
 
                 String ip = args[2].Split('/')[2].Split(':')[0];
                 String port = args[2].Split(':')[2].Split('/')[0];
                 string url = $"tcp://{ip}:{port}/Puppet";
+
+                if (StartClient.masterURL == null) {
+                    StartClient.masterURL = $"{ip}:{port}";
+                }
+                shell.connectPCS(args[1]).createServer(args[0], args[2], args[3], args[4]);
+
+              
 
                 //System.Threading.Thread.Sleep(100);
 

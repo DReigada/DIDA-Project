@@ -7,6 +7,7 @@ using OGPServices;
 
 namespace PuppetMaster.commands {
     class StartClient : Command {
+        public static string masterURL;
         public StartClient(PuppetMasterShell shell) : base(shell, "StartClient","StartClient PID PCS_URL CLIENT_URL MSEC_PER_ROUND NUM_PLAYERS") {
         }
 
@@ -18,7 +19,7 @@ namespace PuppetMaster.commands {
                     Console.WriteLine("[StartClient] There is already a process with this id: \"{0}\"", args[0]);
                     return;
                 }
-                shell.connectPCS(args[1]).createClient(args[0], args[2]); // string clientIP, int clientPort, string serverURL
+                shell.connectPCS(args[1]).createClient(args[0], args[2], masterURL); // string clientIP, int clientPort, string serverURL
 
                 String ip = args[2].Split('/')[2].Split(':')[0];
                 String port = args[2].Split(':')[2].Split('/')[0];
@@ -38,7 +39,7 @@ namespace PuppetMaster.commands {
                     Console.WriteLine("[StartClient] There is already a process with this id: \"{0}\"", args[0]);
                     return;
                 }
-                shell.connectPCS(args[1]).createClient(args[0], args[2], args[5]);
+                shell.connectPCS(args[1]).createClient(args[0], args[2], args[5], masterURL);
 
                 String ip = args[2].Split('/')[2].Split(':')[0];
                 String port = args[2].Split(':')[2].Split('/')[0];

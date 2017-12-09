@@ -11,16 +11,14 @@ namespace ProcessCreationService {
 
         private readonly Dictionary<string, int> pids;
         private Dictionary<string, IProcesses> processes;
-        private readonly List<string> serversURL;
 
         public ProcessCreationService() {
             pids = new Dictionary<string, int>();
             processes = new Dictionary<string, IProcesses>();
-            serversURL = new List<string>();
             clientsURL = new List<string>();
         }
 
-        public void createClient(string pid, string clientURL) {
+        public void createClient(string pid, string clientURL, string masterURL) {
             var clientIp = clientURL.Split('/')[2].Split(':')[0];
             var clientPort = clientURL.Split(':')[2].Split('/')[0];
             clientsURL.Add(url_with_port_ip(clientIp, int.Parse(clientPort)));
@@ -30,9 +28,7 @@ namespace ProcessCreationService {
                 startinfo.UseShellExecute = true;
                 startinfo.WorkingDirectory = @"..\..\..\OGP_PacMan_Client\bin\Debug\";
                 startinfo.FileName = @"OGP_PacMan_Client.exe";
-                lock (serversURL) {
-                    startinfo.Arguments = clientIp + " " + clientPort + " " + serversURL[0];
-                }
+                startinfo.Arguments = clientIp + " " + clientPort + " " + masterURL;
                 startinfo.WindowStyle = ProcessWindowStyle.Normal;
                 var myProcess = new Process();
                 myProcess.StartInfo = startinfo;
@@ -46,7 +42,7 @@ namespace ProcessCreationService {
         }
 
 
-        public void createClient(string pid, string clientURL, string filename) {
+        public void createClient(string pid, string clientURL, string filename, string masterURL) {
             var clientIp = clientURL.Split('/')[2].Split(':')[0];
             var clientPort = clientURL.Split(':')[2].Split('/')[0];
             clientsURL.Add(url_with_port_ip(clientIp, int.Parse(clientPort)));
@@ -56,9 +52,7 @@ namespace ProcessCreationService {
                 startinfo.UseShellExecute = true;
                 startinfo.WorkingDirectory = @"..\..\..\OGP_PacMan_Client\bin\Debug\";
                 startinfo.FileName = @"OGP_PacMan_Client.exe";
-                lock (serversURL) {
-                    startinfo.Arguments = clientIp + " " + clientPort + " " + serversURL[0] + filename;
-                }
+                startinfo.Arguments = clientIp + " " + clientPort + " " + masterURL + filename;
                 startinfo.WindowStyle = ProcessWindowStyle.Normal;
                 var myProcess = new Process();
                 myProcess.StartInfo = startinfo;
@@ -74,9 +68,7 @@ namespace ProcessCreationService {
         public void createServer(string pid, string serverURL, string roundTime, string numPlayers) {
             var serverIp = serverURL.Split('/')[2].Split(':')[0];
             var serverPort = serverURL.Split(':')[2].Split('/')[0];
-            lock (serversURL) {
-                serversURL.Add(url_with_port_ip(serverIp, int.Parse(serverPort)));
-            }
+
             try {
                 var startinfo = new ProcessStartInfo(SERVER_PATH);
                 startinfo.UseShellExecute = true;
