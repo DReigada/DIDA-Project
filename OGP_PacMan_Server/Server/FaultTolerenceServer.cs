@@ -18,18 +18,20 @@ namespace OGP_PacMan_Server.Server {
         private readonly Func<ClientInfo, GameProps> registerClient;
         private readonly Action setMaster;
         private readonly Action<List<ServerWithInfo<FaultTolerenceServer>>> updateServers;
+        private readonly Action<String> removePacManServer;
         private TimeSpan lastProof;
         private FaultTolerenceServer personalSlave;
 
         public FaultTolerenceServer(string myUrl, int gameSpeed, int lifeCheckDelay,
             Func<ClientInfo, GameProps> registerClient,
-            Action<List<ServerWithInfo<FaultTolerenceServer>>> updateServers, Action setMaster) {
+            Action<List<ServerWithInfo<FaultTolerenceServer>>> updateServers, Action setMaster, Action<String> removePacManServer) {
             this.myUrl = myUrl;
             IsMaster = true;
             this.lifeCheckDelay = lifeCheckDelay * gameSpeed;
             this.registerClient = registerClient;
             this.updateServers = updateServers;
             this.setMaster = setMaster;
+            this.removePacManServer = removePacManServer;
             Servers = new List<ServerWithInfo<FaultTolerenceServer>>();
             Servers.Add(new ServerWithInfo<FaultTolerenceServer>(null, myUrl, true));
 
@@ -45,13 +47,14 @@ namespace OGP_PacMan_Server.Server {
         public FaultTolerenceServer(string myUrl, int gameSpeed, int lifeCheckDelay,
             Func<ClientInfo, GameProps> registerClient,
             string masterUrl, Action<List<ServerWithInfo<FaultTolerenceServer>>> updateServers,
-            Action setMaster) {
+            Action setMaster, Action<String> removePacManServer) {
             this.myUrl = myUrl;
             IsMaster = false;
             this.lifeCheckDelay = lifeCheckDelay * gameSpeed;
             this.registerClient = registerClient;
             this.updateServers = updateServers;
             this.setMaster = setMaster;
+            this.removePacManServer = removePacManServer;
             lifeProofTimer = new Timer();
             lifeProofTimer.Elapsed += (a, b) => SendLifeProof();
             lifeProofTimer.Interval = gameSpeed;
@@ -107,9 +110,13 @@ namespace OGP_PacMan_Server.Server {
 
         public void UpdateLifeProofSlave(string url) {
             //lock (personalSlave) {
+            personalSlave = Servers.Find(server => server.URL.Equals(url)).Server;
+            /*
             personalSlave =
-                (FaultTolerenceServer) Activator.GetObject(typeof(FaultTolerenceServer), url + "/FTServer");
-            lifeProofTimer.Enabled = true;
+                (FaultTolerenceServer) Activator.GetObject(typeof(FaultTolerenceServer), url + "/FTServer");*/
+            if (lifeProofTimer.Enabled == false) {
+                lifeProofTimer.Enabled = true;
+            }
             //} 
         }
 
@@ -128,6 +135,9 @@ namespace OGP_PacMan_Server.Server {
                     personalMaster = newMaster.URL;
                     newMaster.Server.UpdateLifeProofSlave(myUrl);
                     lifeCheckTimer.Enabled = true;
+                }
+                else if (IsMaster) {
+                    removePacManServer(url);
                 }
             }
         }
@@ -168,6 +178,7 @@ namespace OGP_PacMan_Server.Server {
 
         private void CheckLifeProof() {
             var diff = DateTime.Now.TimeOfDay.Subtract(lastProof).TotalMilliseconds;
+
             if (diff > lifeCheckDelay) {
                 lifeCheckTimer.Enabled = false;
                 var deadServer = Servers.Find(server => personalMaster.Equals(server.URL));

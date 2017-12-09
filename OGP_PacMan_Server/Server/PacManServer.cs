@@ -28,7 +28,7 @@ namespace OGP_PacMan_Server.Server {
 
         private readonly IList<ClientWithInfo<IPacManClient>> pacManClients;
 
-        private readonly List<IPacmanServer> pacmanServers;
+        private readonly List<ServerWithInfo<IPacmanServer>> pacmanServers;
 
         private readonly FaultTolerenceServer tolerenceServer;
         
@@ -51,8 +51,8 @@ namespace OGP_PacMan_Server.Server {
             myUrl = url;
             pacManClients = new List<ClientWithInfo<IPacManClient>>();
             game = new PacManGame(numberPlayers);
-            pacmanServers = new List<IPacmanServer>();
-            tolerenceServer = new FaultTolerenceServer(url, this.gameSpeed, 5, RegisterClient, UpdatePacManServers, updateClientsServer);
+            pacmanServers = new List<ServerWithInfo<IPacmanServer>>();
+            tolerenceServer = new FaultTolerenceServer(url, this.gameSpeed, 5, RegisterClient, UpdatePacManServers, updateClientsServer, RemovePacManServers);
             RemotingServices.Marshal(tolerenceServer, "FTServer", typeof(FaultTolerenceServer));
             
             gameTimer = new Timer();
@@ -66,9 +66,9 @@ namespace OGP_PacMan_Server.Server {
             myUrl = url;
             pacManClients = new List<ClientWithInfo<IPacManClient>>();
             game = new PacManGame(numberPlayers);
-            pacmanServers = new List<IPacmanServer>();
+            pacmanServers = new List<ServerWithInfo<IPacmanServer>>();
             tolerenceServer =
-                new FaultTolerenceServer(url, this.gameSpeed, 5, RegisterClient, masterUrl, UpdatePacManServers, updateClientsServer);
+                new FaultTolerenceServer(url, this.gameSpeed, 5, RegisterClient, masterUrl, UpdatePacManServers, updateClientsServer, RemovePacManServers);
             RemotingServices.Marshal(tolerenceServer, "FTServer", typeof(FaultTolerenceServer));
 
             gameTimer = new Timer();
@@ -119,7 +119,7 @@ namespace OGP_PacMan_Server.Server {
                 new Thread(() => {
                     pacmanServers.AsParallel().ForAll(server => {
                         try {
-                            server.UpdateState(board);
+                            server.Server.UpdateState(board);
                         }
                         catch (SocketException) {
                         }
@@ -153,8 +153,12 @@ namespace OGP_PacMan_Server.Server {
             for (var i = 1; i < servers.Count; i++) {
                 var pacmanServer =
                     (IPacmanServer) Activator.GetObject(typeof(IPacmanServer), servers[i].URL + "/PacManServer");
-                pacmanServers.Add(pacmanServer);
+                pacmanServers.Add(new ServerWithInfo<IPacmanServer>(pacmanServer, servers[i].URL, false));
             }
+        }
+
+        private void RemovePacManServers(String url) {
+            pacmanServers.RemoveAll( server => server.URL.Equals(url));           
         }
 
         private void updateClientsServer() {
